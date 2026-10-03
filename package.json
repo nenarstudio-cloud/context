@@ -1,0 +1,32 @@
+{
+  "name": "context-agent",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Context: an organizational intelligence agent. Reads through a data port (Zetaris in production), remembers through Meterless H-MEM, and keeps an evidence graph in the Meterless World Model.",
+  "license": "Apache-2.0",
+  "scripts": {
+    "seed": "tsx scripts/seed.ts",
+    "eval": "tsx scripts/eval.ts",
+    "ask": "tsx scripts/ask.ts",
+    "typecheck": "tsc --noEmit",
+    "start": "tsx server/index.ts",
+    "ui-test": "tsx scripts/ui-test.ts",
+    "deploy-test": "tsx scripts/deploy-test.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.40.0",
+    "pg": "^8.13.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  },
+  "devDependencies": {
+    "@types/jsdom": "^30.0.0",
+    "@types/node": "^22.0.0",
+    "@types/pg": "^8.11.0",
+    "jsdom": "^30.1.1"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

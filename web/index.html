@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Context: organizational intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FAFBFF;--raised:#fff;--soft:#F1F4FE;--line:rgba(26,30,46,.09);--line2:rgba(26,30,46,.14);--ink:#1A1E2E;--dim:rgba(26,30,46,.64);--faint:rgba(26,30,46,.42);
+--blue:#3B5BFB;--blue-wash:#EEF1FF;--emerald:#16A87D;--emerald-wash:#E6F8F1;--amber:#C27A00;--amber-wash:#FFF4E1;--rose:#E5484D;--rose-wash:#FDECEC;--violet:#8B5CF6;--violet-wash:#F1ECFE;
+--display:"Sora",-apple-system,sans-serif;--sans:"Inter",-apple-system,BlinkMacSystemFont,sans-serif;--mono:"JetBrains Mono","SF Mono",monospace;
+--r:16px;--rs:10px;--sh:0 4px 16px rgba(26,30,46,.06),0 1px 3px rgba(26,30,46,.04);--sh2:0 12px 36px rgba(26,30,46,.12)}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0F1220;--raised:#171B2E;--soft:#1E2340;--line:rgba(255,255,255,.09);--line2:rgba(255,255,255,.15);--ink:#EEF0FA;--dim:rgba(238,240,250,.66);--faint:rgba(238,240,250,.42);--blue-wash:#1F2A5C;--emerald-wash:#10382E;--amber-wash:#3A2C0F;--rose-wash:#40191B;--violet-wash:#2A2050;--amber:#FFB84D}}
+*{box-sizing:border-box}html,body{margin:0}body{background:var(--bg);color:var(--ink);font:15px/1.55 var(--sans);padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+button{font:inherit;cursor:pointer}header{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar{max-width:1180px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.logo{font:700 20px var(--display);letter-spacing:-.02em}.logo i{color:var(--blue);font-style:normal}
+nav{display:flex;gap:4px}nav button{border:0;background:none;padding:8px 14px;border-radius:999px;color:var(--dim);font-weight:500}nav button.on{background:var(--blue-wash);color:var(--blue)}
+.badge{display:inline-block;min-width:18px;padding:0 6px;margin-left:6px;border-radius:999px;background:var(--rose);color:#fff;font:600 11px/18px var(--sans);text-align:center}
+.sp{flex:1}.chip{font:500 12px var(--mono);padding:4px 10px;border-radius:999px;border:1px solid var(--line2);color:var(--dim)}
+.chip.live{background:var(--emerald-wash);color:var(--emerald);border-color:transparent}.chip.replay{background:var(--amber-wash);color:var(--amber);border-color:transparent}
+main{max-width:1180px;margin:0 auto;padding:28px 20px 80px}.view{display:none}.view.on{display:block}
+h1{font:600 28px var(--display);letter-spacing:-.02em;margin:0 0 6px}.sub{color:var(--dim);margin:0 0 22px}
+.card{background:var(--raised);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:18px 20px}
+.askrow{display:flex;gap:10px;align-items:flex-end}textarea{flex:1;resize:vertical;min-height:54px;padding:14px 16px;border-radius:var(--rs);border:1px solid var(--line2);background:var(--raised);color:var(--ink);font:inherit}
+textarea:focus{outline:2px solid var(--blue);outline-offset:1px}.primary{background:var(--blue);color:#fff;border:0;padding:14px 22px;border-radius:var(--rs);font-weight:600}.primary:disabled{opacity:.5;cursor:default}
+.sugs{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 6px}.sug{border:1px solid var(--line2);background:var(--raised);color:var(--ink);padding:7px 12px;border-radius:999px;font-size:13px}.sug:hover{border-color:var(--blue);color:var(--blue)}
+.timeline{margin-top:22px}.step{display:flex;gap:12px;align-items:flex-start;padding:9px 0;border-bottom:1px dashed var(--line)}.step:last-child{border:0}
+.dot{width:10px;height:10px;border-radius:50%;margin-top:7px;background:var(--faint);flex:none}.dot.running{background:var(--blue);animation:pulse 1s infinite}.dot.ok{background:var(--emerald)}.dot.error{background:var(--rose)}
+@keyframes pulse{50%{opacity:.3}}.sname{font:500 13px var(--mono)}.sargs{color:var(--faint);font:12px var(--mono);word-break:break-word}.ssum{color:var(--dim);font-size:13px}
+.answer{margin-top:22px}.sec{margin-top:16px}.sec h3{margin:0 0 6px;font:600 12px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--blue)}
+.sec p,.sec li{margin:4px 0}.sec ul,.sec ol{margin:0;padding-left:20px}
+.pill{display:inline-block;font:500 11px var(--mono);padding:1px 7px;border-radius:999px;margin:0 2px;border:0;background:var(--violet-wash);color:var(--violet);vertical-align:1px}
+button.pill:hover{background:var(--violet);color:#fff}.pill.data{background:var(--emerald-wash);color:var(--emerald);cursor:help}
+.notice{margin-top:14px;padding:10px 14px;border-radius:var(--rs);background:var(--amber-wash);color:var(--amber);font-size:13px}
+.grid{display:grid;grid-template-columns:1fr 340px;gap:18px}@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.gwrap{padding:8px;overflow:hidden}svg{width:100%;height:auto;display:block;touch-action:manipulation}svg text{font:11px var(--sans);fill:var(--ink)}
+.node{cursor:pointer}.node:hover circle,.node.sel circle{stroke:var(--ink);stroke-width:2.5}.legend{display:flex;flex-wrap:wrap;gap:10px;padding:8px 12px;font-size:12px;color:var(--dim)}.legend span::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;background:var(--c)}
+select{padding:9px 12px;border-radius:var(--rs);border:1px solid var(--line2);background:var(--raised);color:var(--ink);font:inherit}
+.panel h2{font:600 16px var(--display);margin:0 0 4px}.tag{font:500 11px var(--mono);color:var(--dim);text-transform:uppercase}.para{margin:10px 0;padding:10px 12px;background:var(--soft);border-radius:var(--rs);font-size:13.5px}
+.meta{color:var(--faint);font:12px var(--mono)}.dec{margin-bottom:14px}.dec h2{font:600 17px var(--display);margin:2px 0 6px}.dec .proj{font:500 12px var(--mono);color:var(--blue)}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.btns button{padding:8px 14px;border-radius:var(--rs);border:1px solid var(--line2);background:var(--raised);color:var(--ink);font-weight:500}
+.btns .ok{background:var(--emerald);color:#fff;border-color:transparent}.btns .no{color:var(--rose)}.status{font:600 11px var(--mono);padding:2px 8px;border-radius:999px}
+.status.Pending{background:var(--amber-wash);color:var(--amber)}.status.Approved{background:var(--emerald-wash);color:var(--emerald)}.status.Rejected{background:var(--rose-wash);color:var(--rose)}.status.Deferred{background:var(--soft);color:var(--dim)}
+input.note{flex:1;min-width:180px;padding:8px 10px;border-radius:var(--rs);border:1px solid var(--line2);background:var(--raised);color:var(--ink);font:inherit}
+.login{position:fixed;inset:0;z-index:30;background:var(--bg);display:none;align-items:center;justify-content:center;padding:20px}.login.on{display:flex}.login .card{width:min(380px,100%)}.login input{width:100%;padding:12px 14px;border-radius:var(--rs);border:1px solid var(--line2);background:var(--raised);color:var(--ink);font:inherit;margin:12px 0}.err{color:var(--rose);font-size:13px;min-height:20px}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(440px,100%);background:var(--raised);box-shadow:var(--sh2);transform:translateX(105%);transition:transform .25s;z-index:20;padding:env(safe-area-inset-top,0px) 0 0;overflow:auto}.drawer.on{transform:none}
+.drawer .in{padding:20px}.x{float:right;border:0;background:none;font-size:22px;color:var(--dim)}.empty{color:var(--dim);padding:20px 0}
+</style>
+</head>
+<body>
+<header><div class="bar">
+  <div class="logo">Context<i>.</i></div>
+  <nav id="nav">
+    <button data-v="ask" class="on">Ask</button>
+    <button data-v="graph">Evidence and graph</button>
+    <button data-v="decisions">Decisions<span id="pend" class="badge" hidden>0</span></button>
+  </nav>
+  <div class="sp"></div>
+  <span id="asof" class="chip">org date …</span>
+  <span id="mode" class="chip">…</span>
+</div></header>
+<main>
+<section id="v-ask" class="view on">
+  <h1>Ask Context</h1>
+  <p class="sub">Ask why something is happening. Context investigates operations data, field surveys, documents and organizational memory, and cites every claim.</p>
+  <div class="card">
+    <div class="askrow"><textarea id="q" placeholder="Why is Turkana Water Access at risk of missing its Q3 milestone?" aria-label="Question"></textarea><button id="go" class="primary">Investigate</button></div>
+    <div class="sugs" id="sugs"></div>
+  </div>
+  <div id="notice"></div>
+  <div id="timeline" class="card timeline" hidden><div class="tag">Investigation</div><div id="steps"></div></div>
+  <div id="answer" class="card answer" hidden></div>
+</section>
+<section id="v-graph" class="view">
+  <h1>Evidence and graph</h1>
+  <p class="sub">Everything Context knows about a project and why: findings, the documents that evidence them, the people and donor involved, and pending decisions.</p>
+  <p><select id="proj" aria-label="Project"></select></p>
+  <div class="grid"><div class="card gwrap"><svg id="svg" viewBox="0 0 900 700" role="img" aria-label="Evidence graph"></svg><div class="legend" id="legend"></div></div>
+  <div class="card panel" id="panel"><div class="empty">Select a node to see its detail and evidence.</div></div></div>
+</section>
+<section id="v-decisions" class="view">
+  <h1>Decisions</h1>
+  <p class="sub">Context only proposes. Nothing happens until a person decides. Every decision becomes organizational memory.</p>
+  <div id="decs"></div>
+</section>
+</main>
+<div class="login" id="login"><div class="card"><div class="logo">Context<i>.</i></div><p class="sub">Enter the demo password to continue.</p><input id="pw" type="password" autocomplete="current-password" aria-label="Password"><div class="err" id="loginerr"></div><button class="primary" id="loginbtn" style="width:100%">Sign in</button></div></div>
+<aside class="drawer" id="drawer" aria-label="Evidence"><div class="in"><button class="x" id="dx" aria-label="Close">×</button><div id="dbody"></div></div></aside>
+<script>
+const $=s=>document.querySelector(s);
+function el(t,a,...kids){const e=document.createElement(t);for(const[k,v]of Object.entries(a||{})){if(k==="class")e.className=v;else if(k.startsWith("on"))e.addEventListener(k.slice(2),v);else if(v!==false&&v!=null)e.setAttribute(k,v)}
+  for(const c of kids.flat()){if(c==null)continue;e.append(c.nodeType?c:document.createTextNode(String(c)))}return e}
+const sv=(t,a,...kids)=>{const e=document.createElementNS("http://www.w3.org/2000/svg",t);for(const[k,v]of Object.entries(a||{}))e.setAttribute(k,v);for(const c of kids.flat()){if(c)e.append(c.nodeType?c:document.createTextNode(String(c)))}return e};
+const api=async(p,o)=>{const r=await fetch(p,o);const j=await r.json();if(r.status===401&&j.login){needLogin();throw new Error('login required')}if(!r.ok)throw new Error(j.error||r.status);return j};
+function needLogin(){$('#login').classList.add('on');$('#pw').focus()}
+async function doLogin(){try{const r=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:$('#pw').value})});const j=await r.json();if(!r.ok){$('#loginerr').textContent=j.error||'Login failed';return}$('#login').classList.remove('on');$('#pw').value='';boot()}catch(e){$('#loginerr').textContent=e.message}}
+$('#loginbtn').onclick=doLogin;$('#pw').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
+let META={};
+
+/* ---------- navigation ---------- */
+$("#nav").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;show(b.dataset.v)});
+function show(v){document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.v===v));document.querySelectorAll(".view").forEach(s=>s.classList.toggle("on",s.id==="v-"+v));
+  if(v==="graph")loadGraph();if(v==="decisions")loadDecisions()}
+
+/* ---------- evidence drawer and citations ---------- */
+const CHUNK=/^doc-\d{3}#\d{1,2}$/;
+function openDrawer(nodes){const b=$("#dbody");b.replaceChildren(...nodes);$("#drawer").classList.add("on")}
+$("#dx").onclick=()=>$("#drawer").classList.remove("on");
+function paraCard(c){return el("div",{class:"para"},el("div",{class:"tag"},c.doc_type.replace(/_/g," ")," · ",c.created_on),el("strong",null,c.title),
+  el("div",{class:"meta"},c.project_name||"Organisation-wide"," · ",c.source_system," · ",c.source_path),el("p",null,c.text),el("div",{class:"meta"},c.chunk_id))}
+async function showChunks(refs){try{const rows=await api("/api/evidence?refs="+encodeURIComponent(refs.join(",")));openDrawer(rows.length?rows.map(paraCard):[el("div",{class:"empty"},"No document found for that reference.")])}catch(e){openDrawer([el("div",{class:"empty"},e.message)])}}
+function pill(ref){if(CHUNK.test(ref))return el("button",{class:"pill",title:"Open source paragraph",onclick:()=>showChunks([ref])},ref);
+  return el("span",{class:"pill data",title:"Data reference: "+ref},ref.replace(/^ops\.|^kobo\./,""))}
+function withCites(text){const out=[];let last=0;const re=/\[([^\]]+)\]/g;let m;
+  while((m=re.exec(text))){const refs=m[1].split(/[,;]\s*/).filter(r=>CHUNK.test(r)||/^(ops|kobo)\./.test(r));if(!refs.length)continue;out.push(text.slice(last,m.index));refs.forEach(r=>out.push(pill(r)));last=m.index+m[0].length}
+  out.push(text.slice(last));return out}
+
+/* ---------- ask ---------- */
+const SECS=["Answer","Evidence","Pattern","Recommended actions","Confidence and gaps"];
+function renderAnswer(text){const box=$("#answer");box.hidden=false;box.replaceChildren();
+  const lines=text.split("\n");let sec=null,list=null,body=null;
+  const open=(title,rest)=>{sec=el("div",{class:"sec"},el("h3",null,title));body=sec;list=null;box.append(sec);if(rest)body.append(el("p",null,withCites(rest)))};
+  for(const raw of lines){const line=raw.trimEnd();if(!line.trim())continue;
+    const h=SECS.find(s=>line.startsWith(s+":")||line.startsWith(s+" (")||line===s);
+    if(h){const rest=line.includes(":")?line.slice(line.indexOf(":")+1).trim():"";open(h,rest);continue}
+    if(!sec)open("Answer","");
+    const li=line.match(/^\s*(?:[-•]|\d+\.)\s+(.*)$/);
+    if(li){const ordered=/^\s*\d+\./.test(line);if(!list||list.tagName!==(ordered?"OL":"UL")){list=el(ordered?"ol":"ul");body.append(list)}list.append(el("li",null,withCites(li[1])))}
+    else{list=null;body.append(el("p",null,withCites(line)))}}}
+function addStep(e){let s=document.getElementById("s-"+e.id);
+  if(!s){s=el("div",{class:"step",id:"s-"+e.id},el("span",{class:"dot running"}),el("div",null,el("div",{class:"sname"}),el("div",{class:"sargs"}),el("div",{class:"ssum"})));$("#steps").append(s)}
+  s.querySelector(".dot").className="dot "+e.status;s.querySelector(".sname").textContent=e.name;
+  const a=e.args&&Object.keys(e.args).length?JSON.stringify(e.args):"";s.querySelector(".sargs").textContent=a;
+  s.querySelector(".ssum").textContent=e.status==="running"?"running…":(e.summary||e.status)}
+let asking=false;
+async function ask(q){if(asking||!q.trim())return;asking=true;$("#go").disabled=true;$("#answer").hidden=true;$("#steps").replaceChildren();$("#timeline").hidden=false;$("#notice").replaceChildren();
+  try{const r=await fetch("/api/ask",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({question:q})});
+    if(r.status===401){needLogin();throw new Error('login required')}
+    if(!r.ok||!r.body)throw new Error((await r.json()).error||"request failed");
+    const rd=r.body.getReader(),dec=new TextDecoder();let buf="";
+    for(;;){const{value,done}=await rd.read();if(done)break;buf+=dec.decode(value,{stream:true});let i;
+      while((i=buf.indexOf("\n\n"))>=0){const chunk=buf.slice(0,i);buf=buf.slice(i+2);if(!chunk.startsWith("data: "))continue;handle(JSON.parse(chunk.slice(6)))}}
+  }catch(e){$("#notice").replaceChildren(el("div",{class:"notice"},"Error: "+e.message))}
+  asking=false;$("#go").disabled=false;refreshBadge()}
+function handle(e){
+  if(e.type==="start"&&e.mode==="replay")$("#notice").replaceChildren(el("div",{class:"notice"},"Replay mode: no language model is connected. The tool calls, retrieval, memory and graph are real, but the answer text is composed from templates, not model reasoning."));
+  else if(e.type==="tool")addStep(e);else if(e.type==="answer")renderAnswer(e.text);
+  else if(e.type==="error")$("#notice").append(el("div",{class:"notice"},"Error: "+e.message))}
+$("#go").onclick=()=>ask($("#q").value);
+$("#q").addEventListener("keydown",e=>{if(e.key==="Enter"&&(e.metaKey||e.ctrlKey))ask($("#q").value)});
+
+/* ---------- graph ---------- */
+const COLORS={project:"#3B5BFB",finding:"#E5484D",document:"#8B5CF6",person:"#16A87D",donor:"#F5A623",decision:"#C27A00"};
+const EDGE={"evidenced-by":"#3B5BFB","exposed-to":"#E5484D","has-pending":"#C27A00",addresses:"#8B5CF6"};
+let GRAPH=null;
+async function loadGraph(){const sel=$("#proj");if(!sel.options.length){const ps=await api("/api/projects");ps.forEach(p=>sel.append(el("option",{value:p.project_id},p.name)));sel.value="pr1";sel.onchange=loadGraph}
+  GRAPH=await api("/api/graph?project="+sel.value+"&depth=2");drawGraph()}
+function drawGraph(){const svg=$("#svg");svg.replaceChildren();const cx=450,cy=350,{nodes,edges}=GRAPH;const rings={project:0,finding:140,decision:140,donor:225,person:225,document:300};
+  const by={};nodes.forEach(n=>(by[n.type]??=[]).push(n));const pos={};
+  const ringGroups=[["finding","decision"],["donor","person"],["document"]];
+  nodes.filter(n=>n.type==="project"&&n.id.endsWith(":"+$("#proj").value)).forEach(n=>pos[n.id]={x:cx,y:cy,r:26});
+  ringGroups.forEach((g,gi)=>{const list=nodes.filter(n=>g.includes(n.type)&&!pos[n.id]);const R=[140,225,305][gi];
+    list.forEach((n,i)=>{const a=(2*Math.PI*i)/Math.max(list.length,1)-Math.PI/2+gi*.3;pos[n.id]={x:cx+R*1.35*Math.cos(a),y:cy+R*Math.sin(a),r:n.type==="finding"||n.type==="decision"?15:10}})});
+  const rest=nodes.filter(n=>!pos[n.id]);rest.forEach((n,i)=>pos[n.id]={x:60+i*70,y:660,r:9});
+  edges.forEach(e=>{const a=pos[e.from],b=pos[e.to];if(!a||!b)return;svg.append(sv("line",{x1:a.x,y1:a.y,x2:b.x,y2:b.y,stroke:EDGE[e.type]||"rgba(120,126,150,.45)","stroke-width":EDGE[e.type]?2:1,"stroke-opacity":EDGE[e.type]?.8:.6}))});
+  nodes.forEach(n=>{const p=pos[n.id];if(!p)return;const g=sv("g",{class:"node",tabindex:0,role:"button","aria-label":n.type+": "+n.name});
+    g.append(sv("circle",{cx:p.x,cy:p.y,r:p.r,fill:COLORS[n.type]||"#999",stroke:"var(--raised)","stroke-width":2}));
+    const label=n.name.length>24?n.name.slice(0,23)+"…":n.name;if(n.type!=="document"||nodes.length<28)g.append(sv("text",{x:p.x,y:p.y+p.r+13,"text-anchor":"middle"},label));
+    g.append(sv("title",{},n.name));g.addEventListener("click",()=>selectNode(n,g));g.addEventListener("keydown",e=>{if(e.key==="Enter")selectNode(n,g)});svg.append(g)});
+  $("#legend").replaceChildren(...Object.entries(COLORS).map(([k,c])=>el("span",{style:"--c:"+c},k)))}
+async function selectNode(n,g){document.querySelectorAll(".node.sel").forEach(x=>x.classList.remove("sel"));g.classList.add("sel");const p=$("#panel");p.replaceChildren(el("div",{class:"tag"},n.type),el("h2",null,n.name));
+  const a=n.attrs||{};
+  if(n.type==="finding"){p.append(el("p",null,a.statement||n.name),el("div",{class:"meta"},"confidence ",a.confidence));
+    const docs=GRAPH.edges.filter(e=>e.type==="evidenced-by"&&e.from===n.id).map(e=>e.to.split(":").pop());
+    if(docs.length){p.append(el("div",{class:"tag"},"Evidenced by"));for(const d of docs){try{const rows=await api("/api/evidence?doc="+d);rows.slice(0,2).forEach(c=>p.append(paraCard(c)))}catch{}}}}
+  else if(n.type==="document"){const id=n.id.split(":").pop();try{const rows=await api("/api/evidence?doc="+id);rows.forEach(c=>p.append(paraCard(c)))}catch(e){p.append(el("div",{class:"empty"},e.message))}}
+  else if(n.type==="decision")p.append(el("p",null,"Status: "+(a.status||"Pending")),el("div",{class:"meta"},"See the Decisions tab to approve or reject."));
+  else p.append(el("div",{class:"meta"},Object.entries(a).filter(([,v])=>v!=null&&v!=="").map(([k,v])=>k+": "+v).join(" · ")))}
+
+/* ---------- decisions ---------- */
+async function refreshBadge(){try{const d=await api("/api/decisions");const n=d.filter(x=>x.status==="Pending").length;const b=$("#pend");b.hidden=!n;b.textContent=n}catch{}}
+async function loadDecisions(){const rows=await api("/api/decisions");const box=$("#decs");box.replaceChildren();
+  if(!rows.length)return box.append(el("div",{class:"empty"},"No decisions yet. Ask a question and Context will propose actions."));
+  for(const d of rows){const note=el("input",{class:"note",placeholder:"Optional note",maxlength:"300"});
+    const act=s=>async()=>{try{await api("/api/decisions/"+d.decision_id,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({status:s,note:note.value})});await loadDecisions();refreshBadge()}catch(e){alert(e.message)}};
+    const refs=(d.evidence_refs||"").split(",").filter(Boolean);
+    box.append(el("div",{class:"card dec"},el("div",null,el("span",{class:"proj"},d.project||"")," ",el("span",{class:"status "+d.status},d.status)),el("h2",null,d.title),
+      d.rationale?el("p",null,d.rationale):null,el("div",null,refs.map(pill)),
+      d.outcome?el("div",{class:"meta"},"Note: "+d.outcome):null,
+      d.status==="Pending"?el("div",{class:"btns"},note,el("button",{class:"ok",onclick:act("Approved")},"Approve"),el("button",{onclick:act("Deferred")},"Defer"),el("button",{class:"no",onclick:act("Rejected")},"Reject")):el("div",{class:"meta"},"Decided "+(d.decided_at||"")+(d.decided_by?" by "+d.decided_by:""))))}}
+
+/* ---------- boot ---------- */
+async function boot(){$("#sugs").replaceChildren();try{META=await api("/api/meta")}catch(e){if(e.message!=='login required')$("#mode").textContent="server unreachable";return}
+  $("#asof").textContent="org date "+META.asOf;const m=$("#mode");m.className="chip";m.textContent=META.mode==="live"?"LIVE · "+META.model:"REPLAY · scripted, no model";m.classList.add(META.mode);
+  const sugs=META.supported.length?META.supported:["Why is Turkana Water Access at risk of missing its Q3 milestone?","Why is Garissa Maternal Health burning budget faster than it delivers?","What should we change before submitting the Nairobi Civic Tech Lab closeout report?","Which people or contracts create delivery risk in the next two weeks?"];
+  sugs.forEach(s=>$("#sugs").append(el("button",{class:"sug",onclick:()=>{$("#q").value=s;ask(s)}},s)));refreshBadge()}
+boot();
+</script>
+</body>
+</html>

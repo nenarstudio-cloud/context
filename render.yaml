@@ -1,0 +1,26 @@
+# Optional. You can also create the service by hand in the Render dashboard (see DEPLOY.md).
+services:
+  - type: web
+    name: context
+    runtime: node
+    plan: free
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: HOST
+        value: 0.0.0.0
+      - key: CONTEXT_EPHEMERAL
+        value: "1"
+      - key: DATABASE_SSL
+        value: no-verify
+      - key: DATABASE_URL
+        sync: false
+      - key: DEMO_PASSWORD
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: KOBO_TOKEN
+        generateValue: true

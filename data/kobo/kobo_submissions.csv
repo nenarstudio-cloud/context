@@ -1,0 +1,374 @@
+submission_id,form_id,kpi_id,project_id,county,ward,period_month,value,sample_size,enumerator,submitted_at,status
+sub-000001,borehole_audit,K1,pr1,Turkana,ALL,2025-01-01,86,,ENUM-02,2025-02-09,approved
+sub-000002,borehole_audit,K1,pr1,Turkana,ALL,2025-02-01,86,,ENUM-02,2025-03-07,approved
+sub-000003,borehole_audit,K1,pr1,Turkana,ALL,2025-03-01,87,,ENUM-04,2025-04-09,approved
+sub-000004,borehole_audit,K1,pr1,Turkana,ALL,2025-04-01,87,,ENUM-04,2025-05-03,approved
+sub-000005,borehole_audit,K1,pr1,Turkana,ALL,2025-05-01,88,,ENUM-03,2025-06-03,approved
+sub-000006,borehole_audit,K1,pr1,Turkana,ALL,2025-06-01,88,,ENUM-01,2025-07-07,approved
+sub-000007,borehole_audit,K1,pr1,Turkana,ALL,2025-07-01,88,,ENUM-04,2025-08-04,approved
+sub-000008,borehole_audit,K1,pr1,Turkana,ALL,2025-08-01,87,,ENUM-02,2025-09-07,approved
+sub-000009,borehole_audit,K1,pr1,Turkana,ALL,2025-09-01,87,,ENUM-01,2025-10-08,approved
+sub-000010,borehole_audit,K1,pr1,Turkana,ALL,2025-10-01,88,,ENUM-04,2025-11-07,approved
+sub-000011,borehole_audit,K1,pr1,Turkana,ALL,2025-11-01,88,,ENUM-02,2025-12-03,approved
+sub-000012,borehole_audit,K1,pr1,Turkana,ALL,2025-12-01,88,,ENUM-02,2026-01-05,approved
+sub-000013,borehole_audit,K1,pr1,Turkana,ALL,2026-01-01,88,,ENUM-04,2026-02-03,approved
+sub-000014,borehole_audit,K1,pr1,Turkana,ALL,2026-02-01,88,,ENUM-04,2026-03-06,approved
+sub-000015,borehole_audit,K1,pr1,Turkana,ALL,2026-03-01,88,,ENUM-03,2026-04-04,approved
+sub-000016,borehole_audit,K1,pr1,Turkana,ALL,2026-04-01,86,,ENUM-01,2026-05-06,approved
+sub-000017,borehole_audit,K1,pr1,Turkana,ALL,2026-05-01,84,,ENUM-02,2026-06-10,approved
+sub-000018,borehole_audit,K1,pr1,Turkana,ALL,2026-06-01,83,,ENUM-01,2026-07-05,approved
+sub-000019,borehole_audit,K1,pr1,Turkana,Lokichar,2025-01-01,83.2,18,ENUM-02,2025-02-05,approved
+sub-000020,borehole_audit,K1,pr1,Turkana,Lokichar,2025-02-01,84.2,23,ENUM-04,2025-03-09,approved
+sub-000021,borehole_audit,K1,pr1,Turkana,Lokichar,2025-03-01,84.2,17,ENUM-04,2025-04-07,approved
+sub-000022,borehole_audit,K1,pr1,Turkana,Lokichar,2025-04-01,83.6,21,ENUM-01,2025-05-08,approved
+sub-000023,borehole_audit,K1,pr1,Turkana,Lokichar,2025-05-01,85.3,19,ENUM-03,2025-06-07,approved
+sub-000024,borehole_audit,K1,pr1,Turkana,Lokichar,2025-06-01,84.3,15,ENUM-03,2025-07-03,approved
+sub-000025,borehole_audit,K1,pr1,Turkana,Lokichar,2025-07-01,85.3,23,ENUM-02,2025-08-05,approved
+sub-000026,borehole_audit,K1,pr1,Turkana,Lokichar,2025-08-01,83.8,15,ENUM-01,2025-09-06,approved
+sub-000027,borehole_audit,K1,pr1,Turkana,Lokichar,2025-09-01,85.1,21,ENUM-01,2025-10-03,approved
+sub-000028,borehole_audit,K1,pr1,Turkana,Lokichar,2025-10-01,86.0,19,ENUM-04,2025-11-07,approved
+sub-000029,borehole_audit,K1,pr1,Turkana,Lokichar,2025-11-01,86.0,21,ENUM-01,2025-12-09,approved
+sub-000030,borehole_audit,K1,pr1,Turkana,Lokichar,2025-12-01,85.6,22,ENUM-02,2026-01-04,approved
+sub-000031,borehole_audit,K1,pr1,Turkana,Lokichar,2026-01-01,84.8,24,ENUM-03,2026-02-03,approved
+sub-000032,borehole_audit,K1,pr1,Turkana,Lokichar,2026-02-01,85.5,17,ENUM-03,2026-03-05,approved
+sub-000033,borehole_audit,K1,pr1,Turkana,Lokichar,2026-03-01,79.8,14,ENUM-03,2026-04-03,approved
+sub-000034,borehole_audit,K1,pr1,Turkana,Lokichar,2026-04-01,77.8,18,ENUM-01,2026-05-10,approved
+sub-000035,borehole_audit,K1,pr1,Turkana,Lokichar,2026-05-01,75.3,17,ENUM-03,2026-06-05,approved
+sub-000036,borehole_audit,K1,pr1,Turkana,Lokichar,2026-06-01,74.1,25,ENUM-03,2026-07-09,approved
+sub-000037,borehole_audit,K1,pr1,Turkana,Kalokol,2025-01-01,83.6,16,ENUM-01,2025-02-05,approved
+sub-000038,borehole_audit,K1,pr1,Turkana,Kalokol,2025-02-01,84.1,26,ENUM-04,2025-03-05,approved
+sub-000039,borehole_audit,K1,pr1,Turkana,Kalokol,2025-03-01,85.1,21,ENUM-01,2025-04-04,approved
+sub-000040,borehole_audit,K1,pr1,Turkana,Kalokol,2025-04-01,84.4,21,ENUM-03,2025-05-07,approved
+sub-000041,borehole_audit,K1,pr1,Turkana,Kalokol,2025-05-01,86.0,19,ENUM-01,2025-06-05,approved
+sub-000042,borehole_audit,K1,pr1,Turkana,Kalokol,2025-06-01,86.6,23,ENUM-02,2025-07-08,approved
+sub-000043,borehole_audit,K1,pr1,Turkana,Kalokol,2025-07-01,86.6,23,ENUM-01,2025-08-04,approved
+sub-000044,borehole_audit,K1,pr1,Turkana,Kalokol,2025-08-01,85.1,20,ENUM-02,2025-09-04,approved
+sub-000045,borehole_audit,K1,pr1,Turkana,Kalokol,2025-09-01,85.2,15,ENUM-03,2025-10-08,approved
+sub-000046,borehole_audit,K1,pr1,Turkana,Kalokol,2025-10-01,85.7,25,ENUM-04,2025-11-03,approved
+sub-000047,borehole_audit,K1,pr1,Turkana,Kalokol,2025-11-01,86.7,14,ENUM-02,2025-12-05,approved
+sub-000048,borehole_audit,K1,pr1,Turkana,Kalokol,2025-12-01,86.8,25,ENUM-02,2026-01-06,approved
+sub-000049,borehole_audit,K1,pr1,Turkana,Kalokol,2026-01-01,85.6,25,ENUM-03,2026-02-08,approved
+sub-000050,borehole_audit,K1,pr1,Turkana,Kalokol,2026-02-01,87.0,19,ENUM-01,2026-03-08,approved
+sub-000051,borehole_audit,K1,pr1,Turkana,Kalokol,2026-03-01,81.5,25,ENUM-03,2026-04-07,approved
+sub-000052,borehole_audit,K1,pr1,Turkana,Kalokol,2026-04-01,79.3,17,ENUM-01,2026-05-05,approved
+sub-000053,borehole_audit,K1,pr1,Turkana,Kalokol,2026-05-01,77.0,25,ENUM-03,2026-06-04,approved
+sub-000054,borehole_audit,K1,pr1,Turkana,Kalokol,2026-06-01,76.3,18,ENUM-02,2026-07-05,approved
+sub-000055,borehole_audit,K1,pr1,Turkana,Lodwar Township,2025-01-01,87.6,26,ENUM-03,2025-02-07,approved
+sub-000056,borehole_audit,K1,pr1,Turkana,Lodwar Township,2025-02-01,86.8,20,ENUM-03,2025-03-06,approved
+sub-000057,borehole_audit,K1,pr1,Turkana,Lodwar Township,2025-03-01,88.9,17,ENUM-02,2025-04-06,approved
+sub-000058,borehole_audit,K1,pr1,Turkana,Lodwar Township,2025-04-01,88.5,25,ENUM-02,2025-05-06,approved
+sub-000059,borehole_audit,K1,pr1,Turkana,Lodwar Township,2025-05-01,89.2,18,ENUM-03,2025-06-03,approved
+sub-000060,borehole_audit,K1,pr1,Turkana,Lodwar Township,2025-06-01,89.9,16,ENUM-02,2025-07-05,approved
+sub-000061,borehole_audit,K1,pr1,Turkana,Lodwar Township,2025-07-01,88.5,22,ENUM-03,2025-08-03,approved
+sub-000062,borehole_audit,K1,pr1,Turkana,Lodwar Township,2025-08-01,88.1,24,ENUM-02,2025-09-03,approved
+sub-000063,borehole_audit,K1,pr1,Turkana,Lodwar Township,2025-09-01,87.7,20,ENUM-03,2025-10-05,approved
+sub-000064,borehole_audit,K1,pr1,Turkana,Lodwar Township,2025-10-01,88.7,14,ENUM-02,2025-11-08,approved
+sub-000065,borehole_audit,K1,pr1,Turkana,Lodwar Township,2025-11-01,89.3,26,ENUM-03,2025-12-08,approved
+sub-000066,borehole_audit,K1,pr1,Turkana,Lodwar Township,2025-12-01,89.6,21,ENUM-01,2026-01-07,approved
+sub-000067,borehole_audit,K1,pr1,Turkana,Lodwar Township,2026-01-01,88.9,17,ENUM-02,2026-02-06,approved
+sub-000068,borehole_audit,K1,pr1,Turkana,Lodwar Township,2026-02-01,89.4,26,ENUM-01,2026-03-07,approved
+sub-000069,borehole_audit,K1,pr1,Turkana,Lodwar Township,2026-03-01,91.2,20,ENUM-03,2026-04-07,approved
+sub-000070,borehole_audit,K1,pr1,Turkana,Lodwar Township,2026-04-01,89.1,17,ENUM-02,2026-05-03,approved
+sub-000071,borehole_audit,K1,pr1,Turkana,Lodwar Township,2026-05-01,87.9,19,ENUM-02,2026-06-09,approved
+sub-000072,borehole_audit,K1,pr1,Turkana,Lodwar Township,2026-06-01,86.5,14,ENUM-03,2026-07-09,approved
+sub-000073,borehole_audit,K1,pr1,Turkana,Kakuma,2025-01-01,87.7,15,ENUM-04,2025-02-07,approved
+sub-000074,borehole_audit,K1,pr1,Turkana,Kakuma,2025-02-01,86.0,18,ENUM-01,2025-03-07,approved
+sub-000075,borehole_audit,K1,pr1,Turkana,Kakuma,2025-03-01,87.7,20,ENUM-03,2025-04-07,approved
+sub-000076,borehole_audit,K1,pr1,Turkana,Kakuma,2025-04-01,87.2,22,ENUM-01,2025-05-10,approved
+sub-000077,borehole_audit,K1,pr1,Turkana,Kakuma,2025-05-01,88.3,17,ENUM-01,2025-06-09,approved
+sub-000078,borehole_audit,K1,pr1,Turkana,Kakuma,2025-06-01,89.4,26,ENUM-04,2025-07-08,approved
+sub-000079,borehole_audit,K1,pr1,Turkana,Kakuma,2025-07-01,89.1,15,ENUM-03,2025-08-03,approved
+sub-000080,borehole_audit,K1,pr1,Turkana,Kakuma,2025-08-01,88.2,20,ENUM-01,2025-09-05,approved
+sub-000081,borehole_audit,K1,pr1,Turkana,Kakuma,2025-09-01,87.1,17,ENUM-02,2025-10-04,approved
+sub-000082,borehole_audit,K1,pr1,Turkana,Kakuma,2025-10-01,88.0,18,ENUM-03,2025-11-07,approved
+sub-000083,borehole_audit,K1,pr1,Turkana,Kakuma,2025-11-01,89.1,18,ENUM-03,2025-12-10,approved
+sub-000084,borehole_audit,K1,pr1,Turkana,Kakuma,2025-12-01,88.1,15,ENUM-04,2026-01-07,approved
+sub-000085,borehole_audit,K1,pr1,Turkana,Kakuma,2026-01-01,88.8,17,ENUM-02,2026-02-03,approved
+sub-000086,borehole_audit,K1,pr1,Turkana,Kakuma,2026-02-01,89.5,20,ENUM-03,2026-03-06,approved
+sub-000087,borehole_audit,K1,pr1,Turkana,Kakuma,2026-03-01,90.3,25,ENUM-03,2026-04-07,approved
+sub-000088,borehole_audit,K1,pr1,Turkana,Kakuma,2026-04-01,88.5,19,ENUM-02,2026-05-10,approved
+sub-000089,borehole_audit,K1,pr1,Turkana,Kakuma,2026-05-01,86.0,14,ENUM-01,2026-06-09,approved
+sub-000090,borehole_audit,K1,pr1,Turkana,Kakuma,2026-06-01,85.3,14,ENUM-01,2026-07-06,approved
+sub-000091,borehole_audit,K1,pr1,Turkana,Turkwel,2025-01-01,86.4,15,ENUM-03,2025-02-04,approved
+sub-000092,borehole_audit,K1,pr1,Turkana,Turkwel,2025-02-01,85.6,17,ENUM-02,2025-03-08,approved
+sub-000093,borehole_audit,K1,pr1,Turkana,Turkwel,2025-03-01,88.0,15,ENUM-04,2025-04-06,approved
+sub-000094,borehole_audit,K1,pr1,Turkana,Turkwel,2025-04-01,87.6,20,ENUM-02,2025-05-06,approved
+sub-000095,borehole_audit,K1,pr1,Turkana,Turkwel,2025-05-01,89.3,26,ENUM-04,2025-06-10,approved
+sub-000096,borehole_audit,K1,pr1,Turkana,Turkwel,2025-06-01,89.1,20,ENUM-03,2025-07-03,approved
+sub-000097,borehole_audit,K1,pr1,Turkana,Turkwel,2025-07-01,88.2,20,ENUM-01,2025-08-06,approved
+sub-000098,borehole_audit,K1,pr1,Turkana,Turkwel,2025-08-01,88.1,16,ENUM-01,2025-09-10,approved
+sub-000099,borehole_audit,K1,pr1,Turkana,Turkwel,2025-09-01,88.0,24,ENUM-03,2025-10-04,approved
+sub-000100,borehole_audit,K1,pr1,Turkana,Turkwel,2025-10-01,88.6,19,ENUM-03,2025-11-10,approved
+sub-000101,borehole_audit,K1,pr1,Turkana,Turkwel,2025-11-01,87.6,19,ENUM-03,2025-12-10,approved
+sub-000102,borehole_audit,K1,pr1,Turkana,Turkwel,2025-12-01,88.1,24,ENUM-04,2026-01-10,approved
+sub-000103,borehole_audit,K1,pr1,Turkana,Turkwel,2026-01-01,88.2,26,ENUM-02,2026-02-07,approved
+sub-000104,borehole_audit,K1,pr1,Turkana,Turkwel,2026-02-01,89.2,18,ENUM-01,2026-03-03,approved
+sub-000105,borehole_audit,K1,pr1,Turkana,Turkwel,2026-03-01,88.3,17,ENUM-02,2026-04-08,approved
+sub-000106,borehole_audit,K1,pr1,Turkana,Turkwel,2026-04-01,87.5,25,ENUM-01,2026-05-09,approved
+sub-000107,borehole_audit,K1,pr1,Turkana,Turkwel,2026-05-01,84.5,19,ENUM-03,2026-06-07,approved
+sub-000108,borehole_audit,K1,pr1,Turkana,Turkwel,2026-06-01,83.8,18,ENUM-02,2026-07-06,approved
+sub-000109,borehole_audit,K1,pr1,Turkana,Lorugum,2025-01-01,86.4,23,ENUM-03,2025-02-06,approved
+sub-000110,borehole_audit,K1,pr1,Turkana,Lorugum,2025-02-01,85.9,17,ENUM-01,2025-03-07,approved
+sub-000111,borehole_audit,K1,pr1,Turkana,Lorugum,2025-03-01,86.6,18,ENUM-01,2025-04-10,approved
+sub-000112,borehole_audit,K1,pr1,Turkana,Lorugum,2025-04-01,85.9,19,ENUM-04,2025-05-05,approved
+sub-000113,borehole_audit,K1,pr1,Turkana,Lorugum,2025-05-01,86.4,21,ENUM-01,2025-06-03,approved
+sub-000114,borehole_audit,K1,pr1,Turkana,Lorugum,2025-06-01,86.5,17,ENUM-04,2025-07-05,approved
+sub-000115,borehole_audit,K1,pr1,Turkana,Lorugum,2025-07-01,87.4,17,ENUM-01,2025-08-07,approved
+sub-000116,borehole_audit,K1,pr1,Turkana,Lorugum,2025-08-01,86.2,26,ENUM-01,2025-09-09,approved
+sub-000117,borehole_audit,K1,pr1,Turkana,Lorugum,2025-09-01,86.2,18,ENUM-01,2025-10-08,approved
+sub-000118,borehole_audit,K1,pr1,Turkana,Lorugum,2025-10-01,87.1,26,ENUM-02,2025-11-09,approved
+sub-000119,borehole_audit,K1,pr1,Turkana,Lorugum,2025-11-01,88.0,25,ENUM-02,2025-12-08,approved
+sub-000120,borehole_audit,K1,pr1,Turkana,Lorugum,2025-12-01,87.0,16,ENUM-04,2026-01-07,approved
+sub-000121,borehole_audit,K1,pr1,Turkana,Lorugum,2026-01-01,86.5,22,ENUM-04,2026-02-05,approved
+sub-000122,borehole_audit,K1,pr1,Turkana,Lorugum,2026-02-01,88.1,24,ENUM-03,2026-03-07,approved
+sub-000123,borehole_audit,K1,pr1,Turkana,Lorugum,2026-03-01,85.9,21,ENUM-01,2026-04-05,approved
+sub-000124,borehole_audit,K1,pr1,Turkana,Lorugum,2026-04-01,84.3,24,ENUM-03,2026-05-09,approved
+sub-000125,borehole_audit,K1,pr1,Turkana,Lorugum,2026-05-01,82.9,16,ENUM-02,2026-06-04,approved
+sub-000126,borehole_audit,K1,pr1,Turkana,Lorugum,2026-06-01,80.1,16,ENUM-03,2026-07-08,approved
+sub-000127,household_access,K2,pr1,Turkana,ALL,2025-01-01,52000,,ENUM-01,2025-02-03,approved
+sub-000128,household_access,K2,pr1,Turkana,ALL,2025-02-01,54612,,ENUM-02,2025-03-06,approved
+sub-000129,household_access,K2,pr1,Turkana,ALL,2025-03-01,57224,,ENUM-02,2025-04-08,approved
+sub-000130,household_access,K2,pr1,Turkana,ALL,2025-04-01,59835,,ENUM-03,2025-05-06,approved
+sub-000131,household_access,K2,pr1,Turkana,ALL,2025-05-01,62447,,ENUM-03,2025-06-07,approved
+sub-000132,household_access,K2,pr1,Turkana,ALL,2025-06-01,65059,,ENUM-01,2025-07-07,approved
+sub-000133,household_access,K2,pr1,Turkana,ALL,2025-07-01,67671,,ENUM-04,2025-08-08,approved
+sub-000134,household_access,K2,pr1,Turkana,ALL,2025-08-01,70282,,ENUM-02,2025-09-08,approved
+sub-000135,household_access,K2,pr1,Turkana,ALL,2025-09-01,72894,,ENUM-02,2025-10-05,approved
+sub-000136,household_access,K2,pr1,Turkana,ALL,2025-10-01,75506,,ENUM-03,2025-11-06,approved
+sub-000137,household_access,K2,pr1,Turkana,ALL,2025-11-01,78118,,ENUM-04,2025-12-06,approved
+sub-000138,household_access,K2,pr1,Turkana,ALL,2025-12-01,80729,,ENUM-01,2026-01-07,approved
+sub-000139,household_access,K2,pr1,Turkana,ALL,2026-01-01,83341,,ENUM-04,2026-02-09,approved
+sub-000140,household_access,K2,pr1,Turkana,ALL,2026-02-01,85953,,ENUM-03,2026-03-05,approved
+sub-000141,household_access,K2,pr1,Turkana,ALL,2026-03-01,88565,,ENUM-03,2026-04-04,approved
+sub-000142,household_access,K2,pr1,Turkana,ALL,2026-04-01,91176,,ENUM-03,2026-05-04,approved
+sub-000143,household_access,K2,pr1,Turkana,ALL,2026-05-01,93788,,ENUM-01,2026-06-03,approved
+sub-000144,household_access,K2,pr1,Turkana,ALL,2026-06-01,96400,,ENUM-04,2026-07-06,approved
+sub-000145,committee_register,K10,pr1,Turkana,ALL,2025-01-01,19,,ENUM-04,2025-02-10,approved
+sub-000146,committee_register,K10,pr1,Turkana,ALL,2025-02-01,19,,ENUM-01,2025-03-04,approved
+sub-000147,committee_register,K10,pr1,Turkana,ALL,2025-03-01,20,,ENUM-04,2025-04-05,approved
+sub-000148,committee_register,K10,pr1,Turkana,ALL,2025-04-01,20,,ENUM-03,2025-05-05,approved
+sub-000149,committee_register,K10,pr1,Turkana,ALL,2025-05-01,20,,ENUM-03,2025-06-09,approved
+sub-000150,committee_register,K10,pr1,Turkana,ALL,2025-06-01,20,,ENUM-03,2025-07-06,approved
+sub-000151,committee_register,K10,pr1,Turkana,ALL,2025-07-01,21,,ENUM-02,2025-08-08,approved
+sub-000152,committee_register,K10,pr1,Turkana,ALL,2025-08-01,21,,ENUM-03,2025-09-08,approved
+sub-000153,committee_register,K10,pr1,Turkana,ALL,2025-09-01,21,,ENUM-03,2025-10-09,approved
+sub-000154,committee_register,K10,pr1,Turkana,ALL,2025-10-01,22,,ENUM-02,2025-11-03,approved
+sub-000155,committee_register,K10,pr1,Turkana,ALL,2025-11-01,22,,ENUM-04,2025-12-06,approved
+sub-000156,committee_register,K10,pr1,Turkana,ALL,2025-12-01,22,,ENUM-02,2026-01-10,approved
+sub-000157,committee_register,K10,pr1,Turkana,ALL,2026-01-01,23,,ENUM-03,2026-02-08,approved
+sub-000158,committee_register,K10,pr1,Turkana,ALL,2026-02-01,23,,ENUM-02,2026-03-09,approved
+sub-000159,committee_register,K10,pr1,Turkana,ALL,2026-03-01,23,,ENUM-01,2026-04-05,approved
+sub-000160,committee_register,K10,pr1,Turkana,ALL,2026-04-01,23,,ENUM-02,2026-05-05,approved
+sub-000161,committee_register,K10,pr1,Turkana,ALL,2026-05-01,24,,ENUM-03,2026-06-06,approved
+sub-000162,committee_register,K10,pr1,Turkana,ALL,2026-06-01,24,,ENUM-03,2026-07-04,approved
+sub-000163,placement_tracker,K4,pr3,Kilifi,ALL,2025-01-01,40,,ENUM-03,2025-02-06,approved
+sub-000164,placement_tracker,K4,pr3,Kilifi,ALL,2025-02-01,53,,ENUM-03,2025-03-05,approved
+sub-000165,placement_tracker,K4,pr3,Kilifi,ALL,2025-03-01,66,,ENUM-04,2025-04-07,approved
+sub-000166,placement_tracker,K4,pr3,Kilifi,ALL,2025-04-01,79,,ENUM-04,2025-05-07,approved
+sub-000167,placement_tracker,K4,pr3,Kilifi,ALL,2025-05-01,92,,ENUM-02,2025-06-07,approved
+sub-000168,placement_tracker,K4,pr3,Kilifi,ALL,2025-06-01,105,,ENUM-02,2025-07-10,approved
+sub-000169,placement_tracker,K4,pr3,Kilifi,ALL,2025-07-01,118,,ENUM-02,2025-08-06,approved
+sub-000170,placement_tracker,K4,pr3,Kilifi,ALL,2025-08-01,131,,ENUM-02,2025-09-09,approved
+sub-000171,placement_tracker,K4,pr3,Kilifi,ALL,2025-09-01,144,,ENUM-04,2025-10-05,approved
+sub-000172,placement_tracker,K4,pr3,Kilifi,ALL,2025-10-01,158,,ENUM-01,2025-11-05,approved
+sub-000173,placement_tracker,K4,pr3,Kilifi,ALL,2025-11-01,171,,ENUM-02,2025-12-05,approved
+sub-000174,placement_tracker,K4,pr3,Kilifi,ALL,2025-12-01,184,,ENUM-01,2026-01-03,approved
+sub-000175,placement_tracker,K4,pr3,Kilifi,ALL,2026-01-01,197,,ENUM-02,2026-02-10,approved
+sub-000176,placement_tracker,K4,pr3,Kilifi,ALL,2026-02-01,210,,ENUM-01,2026-03-08,approved
+sub-000177,placement_tracker,K4,pr3,Kilifi,ALL,2026-03-01,223,,ENUM-03,2026-04-10,approved
+sub-000178,placement_tracker,K4,pr3,Kilifi,ALL,2026-04-01,236,,ENUM-03,2026-05-03,approved
+sub-000179,placement_tracker,K4,pr3,Kilifi,ALL,2026-05-01,249,,ENUM-03,2026-06-05,approved
+sub-000180,placement_tracker,K4,pr3,Kilifi,ALL,2026-06-01,262,,ENUM-01,2026-07-03,approved
+sub-000181,clinic_register,K7,pr4,Garissa,ALL,2025-01-01,1150,,ENUM-02,2025-02-10,approved
+sub-000182,clinic_register,K7,pr4,Garissa,ALL,2025-02-01,1200,,ENUM-04,2025-03-08,approved
+sub-000183,clinic_register,K7,pr4,Garissa,ALL,2025-03-01,1260,,ENUM-04,2025-04-06,approved
+sub-000184,clinic_register,K7,pr4,Garissa,ALL,2025-04-01,1320,,ENUM-02,2025-05-10,approved
+sub-000185,clinic_register,K7,pr4,Garissa,ALL,2025-05-01,1380,,ENUM-01,2025-06-03,approved
+sub-000186,clinic_register,K7,pr4,Garissa,ALL,2025-06-01,1440,,ENUM-01,2025-07-04,approved
+sub-000187,clinic_register,K7,pr4,Garissa,ALL,2025-07-01,1500,,ENUM-04,2025-08-04,approved
+sub-000188,clinic_register,K7,pr4,Garissa,ALL,2025-08-01,1560,,ENUM-03,2025-09-07,approved
+sub-000189,clinic_register,K7,pr4,Garissa,ALL,2025-09-01,1620,,ENUM-04,2025-10-06,approved
+sub-000190,clinic_register,K7,pr4,Garissa,ALL,2025-10-01,1680,,ENUM-03,2025-11-03,approved
+sub-000191,clinic_register,K7,pr4,Garissa,ALL,2025-11-01,1720,,ENUM-03,2025-12-03,approved
+sub-000192,clinic_register,K7,pr4,Garissa,ALL,2025-12-01,1720,,ENUM-04,2026-01-04,approved
+sub-000193,clinic_register,K7,pr4,Garissa,ALL,2026-01-01,1690,,ENUM-04,2026-02-05,approved
+sub-000194,clinic_register,K7,pr4,Garissa,ALL,2026-02-01,1650,,ENUM-03,2026-03-05,approved
+sub-000195,clinic_register,K7,pr4,Garissa,ALL,2026-03-01,1540,,ENUM-03,2026-04-03,approved
+sub-000196,clinic_register,K7,pr4,Garissa,ALL,2026-04-01,1420,,ENUM-04,2026-05-09,approved
+sub-000197,clinic_register,K7,pr4,Garissa,ALL,2026-05-01,1310,,ENUM-02,2026-06-03,approved
+sub-000198,clinic_register,K7,pr4,Garissa,ALL,2026-06-01,1310,,ENUM-02,2026-07-10,approved
+sub-000199,clinic_register,K7,pr4,Garissa,Garissa Township,2025-01-01,340.7,,ENUM-03,2025-02-08,approved
+sub-000200,clinic_register,K7,pr4,Garissa,Garissa Township,2025-02-01,353.8,,ENUM-01,2025-03-03,approved
+sub-000201,clinic_register,K7,pr4,Garissa,Garissa Township,2025-03-01,374.9,,ENUM-01,2025-04-06,approved
+sub-000202,clinic_register,K7,pr4,Garissa,Garissa Township,2025-04-01,390.9,,ENUM-04,2025-05-03,approved
+sub-000203,clinic_register,K7,pr4,Garissa,Garissa Township,2025-05-01,407.7,,ENUM-01,2025-06-06,approved
+sub-000204,clinic_register,K7,pr4,Garissa,Garissa Township,2025-06-01,429.9,,ENUM-02,2025-07-07,approved
+sub-000205,clinic_register,K7,pr4,Garissa,Garissa Township,2025-07-01,452.9,,ENUM-02,2025-08-05,approved
+sub-000206,clinic_register,K7,pr4,Garissa,Garissa Township,2025-08-01,467.6,,ENUM-04,2025-09-03,approved
+sub-000207,clinic_register,K7,pr4,Garissa,Garissa Township,2025-09-01,476.9,,ENUM-03,2025-10-10,approved
+sub-000208,clinic_register,K7,pr4,Garissa,Garissa Township,2025-10-01,500.8,,ENUM-02,2025-11-06,approved
+sub-000209,clinic_register,K7,pr4,Garissa,Garissa Township,2025-11-01,527.9,,ENUM-03,2025-12-08,approved
+sub-000210,clinic_register,K7,pr4,Garissa,Garissa Township,2025-12-01,526.6,,ENUM-04,2026-01-03,approved
+sub-000211,clinic_register,K7,pr4,Garissa,Garissa Township,2026-01-01,496.3,,ENUM-03,2026-02-05,approved
+sub-000212,clinic_register,K7,pr4,Garissa,Garissa Township,2026-02-01,488.3,,ENUM-01,2026-03-06,approved
+sub-000213,clinic_register,K7,pr4,Garissa,Garissa Township,2026-03-01,452.3,,ENUM-03,2026-04-06,approved
+sub-000214,clinic_register,K7,pr4,Garissa,Garissa Township,2026-04-01,434.2,,ENUM-03,2026-05-03,approved
+sub-000215,clinic_register,K7,pr4,Garissa,Garissa Township,2026-05-01,396.1,,ENUM-02,2026-06-07,approved
+sub-000216,clinic_register,K7,pr4,Garissa,Garissa Township,2026-06-01,403.2,,ENUM-02,2026-07-07,approved
+sub-000217,clinic_register,K7,pr4,Garissa,Balambala,2025-01-01,190.7,,ENUM-03,2025-02-09,approved
+sub-000218,clinic_register,K7,pr4,Garissa,Balambala,2025-02-01,204.2,,ENUM-02,2025-03-10,approved
+sub-000219,clinic_register,K7,pr4,Garissa,Balambala,2025-03-01,214.3,,ENUM-02,2025-04-08,approved
+sub-000220,clinic_register,K7,pr4,Garissa,Balambala,2025-04-01,222.5,,ENUM-01,2025-05-08,approved
+sub-000221,clinic_register,K7,pr4,Garissa,Balambala,2025-05-01,230.8,,ENUM-02,2025-06-10,approved
+sub-000222,clinic_register,K7,pr4,Garissa,Balambala,2025-06-01,250.0,,ENUM-03,2025-07-03,approved
+sub-000223,clinic_register,K7,pr4,Garissa,Balambala,2025-07-01,257.6,,ENUM-02,2025-08-07,approved
+sub-000224,clinic_register,K7,pr4,Garissa,Balambala,2025-08-01,257.8,,ENUM-03,2025-09-07,approved
+sub-000225,clinic_register,K7,pr4,Garissa,Balambala,2025-09-01,281.8,,ENUM-04,2025-10-07,approved
+sub-000226,clinic_register,K7,pr4,Garissa,Balambala,2025-10-01,278.7,,ENUM-02,2025-11-10,approved
+sub-000227,clinic_register,K7,pr4,Garissa,Balambala,2025-11-01,300.1,,ENUM-01,2025-12-08,approved
+sub-000228,clinic_register,K7,pr4,Garissa,Balambala,2025-12-01,297.3,,ENUM-03,2026-01-03,approved
+sub-000229,clinic_register,K7,pr4,Garissa,Balambala,2026-01-01,280.8,,ENUM-01,2026-02-07,approved
+sub-000230,clinic_register,K7,pr4,Garissa,Balambala,2026-02-01,273.8,,ENUM-04,2026-03-09,approved
+sub-000231,clinic_register,K7,pr4,Garissa,Balambala,2026-03-01,259.2,,ENUM-01,2026-04-04,approved
+sub-000232,clinic_register,K7,pr4,Garissa,Balambala,2026-04-01,237.9,,ENUM-03,2026-05-05,approved
+sub-000233,clinic_register,K7,pr4,Garissa,Balambala,2026-05-01,220.6,,ENUM-02,2026-06-09,approved
+sub-000234,clinic_register,K7,pr4,Garissa,Balambala,2026-06-01,224.2,,ENUM-03,2026-07-04,approved
+sub-000235,clinic_register,K7,pr4,Garissa,Fafi,2025-01-01,217.4,,ENUM-02,2025-02-10,approved
+sub-000236,clinic_register,K7,pr4,Garissa,Fafi,2025-02-01,221.9,,ENUM-02,2025-03-09,approved
+sub-000237,clinic_register,K7,pr4,Garissa,Fafi,2025-03-01,236.5,,ENUM-02,2025-04-08,approved
+sub-000238,clinic_register,K7,pr4,Garissa,Fafi,2025-04-01,256.5,,ENUM-04,2025-05-05,approved
+sub-000239,clinic_register,K7,pr4,Garissa,Fafi,2025-05-01,264.2,,ENUM-03,2025-06-07,approved
+sub-000240,clinic_register,K7,pr4,Garissa,Fafi,2025-06-01,279.1,,ENUM-04,2025-07-03,approved
+sub-000241,clinic_register,K7,pr4,Garissa,Fafi,2025-07-01,289.7,,ENUM-04,2025-08-08,approved
+sub-000242,clinic_register,K7,pr4,Garissa,Fafi,2025-08-01,292.9,,ENUM-02,2025-09-07,approved
+sub-000243,clinic_register,K7,pr4,Garissa,Fafi,2025-09-01,304.7,,ENUM-01,2025-10-08,approved
+sub-000244,clinic_register,K7,pr4,Garissa,Fafi,2025-10-01,316.6,,ENUM-04,2025-11-03,approved
+sub-000245,clinic_register,K7,pr4,Garissa,Fafi,2025-11-01,322.5,,ENUM-04,2025-12-07,approved
+sub-000246,clinic_register,K7,pr4,Garissa,Fafi,2025-12-01,334.0,,ENUM-02,2026-01-10,approved
+sub-000247,clinic_register,K7,pr4,Garissa,Fafi,2026-01-01,330.4,,ENUM-03,2026-02-04,approved
+sub-000248,clinic_register,K7,pr4,Garissa,Fafi,2026-02-01,310.7,,ENUM-04,2026-03-07,approved
+sub-000249,clinic_register,K7,pr4,Garissa,Fafi,2026-03-01,292.1,,ENUM-02,2026-04-10,approved
+sub-000250,clinic_register,K7,pr4,Garissa,Fafi,2026-04-01,148.0,,ENUM-03,2026-05-06,approved
+sub-000251,clinic_register,K7,pr4,Garissa,Fafi,2026-05-01,134.0,,ENUM-04,2026-06-08,approved
+sub-000252,clinic_register,K7,pr4,Garissa,Fafi,2026-06-01,243.2,,ENUM-02,2026-07-08,approved
+sub-000253,clinic_register,K7,pr4,Garissa,Ijara,2025-01-01,189.9,,ENUM-03,2025-02-10,approved
+sub-000254,clinic_register,K7,pr4,Garissa,Ijara,2025-02-01,207.5,,ENUM-02,2025-03-06,approved
+sub-000255,clinic_register,K7,pr4,Garissa,Ijara,2025-03-01,214.2,,ENUM-02,2025-04-06,approved
+sub-000256,clinic_register,K7,pr4,Garissa,Ijara,2025-04-01,229.0,,ENUM-03,2025-05-08,approved
+sub-000257,clinic_register,K7,pr4,Garissa,Ijara,2025-05-01,240.0,,ENUM-03,2025-06-06,approved
+sub-000258,clinic_register,K7,pr4,Garissa,Ijara,2025-06-01,239.3,,ENUM-03,2025-07-08,approved
+sub-000259,clinic_register,K7,pr4,Garissa,Ijara,2025-07-01,257.8,,ENUM-01,2025-08-05,approved
+sub-000260,clinic_register,K7,pr4,Garissa,Ijara,2025-08-01,269.4,,ENUM-02,2025-09-10,approved
+sub-000261,clinic_register,K7,pr4,Garissa,Ijara,2025-09-01,275.4,,ENUM-04,2025-10-10,approved
+sub-000262,clinic_register,K7,pr4,Garissa,Ijara,2025-10-01,283.6,,ENUM-04,2025-11-08,approved
+sub-000263,clinic_register,K7,pr4,Garissa,Ijara,2025-11-01,296.1,,ENUM-03,2025-12-10,approved
+sub-000264,clinic_register,K7,pr4,Garissa,Ijara,2025-12-01,295.9,,ENUM-02,2026-01-08,approved
+sub-000265,clinic_register,K7,pr4,Garissa,Ijara,2026-01-01,286.1,,ENUM-04,2026-02-05,approved
+sub-000266,clinic_register,K7,pr4,Garissa,Ijara,2026-02-01,273.5,,ENUM-04,2026-03-10,approved
+sub-000267,clinic_register,K7,pr4,Garissa,Ijara,2026-03-01,267.5,,ENUM-01,2026-04-05,approved
+sub-000268,clinic_register,K7,pr4,Garissa,Ijara,2026-04-01,246.3,,ENUM-01,2026-05-05,approved
+sub-000269,clinic_register,K7,pr4,Garissa,Ijara,2026-05-01,227.3,,ENUM-02,2026-06-06,approved
+sub-000270,clinic_register,K7,pr4,Garissa,Ijara,2026-06-01,229.4,,ENUM-03,2026-07-04,approved
+sub-000271,clinic_register,K7,pr4,Garissa,Dadaab,2025-01-01,194.8,,ENUM-04,2025-02-10,approved
+sub-000272,clinic_register,K7,pr4,Garissa,Dadaab,2025-02-01,201.4,,ENUM-04,2025-03-08,approved
+sub-000273,clinic_register,K7,pr4,Garissa,Dadaab,2025-03-01,218.4,,ENUM-01,2025-04-03,approved
+sub-000274,clinic_register,K7,pr4,Garissa,Dadaab,2025-04-01,218.8,,ENUM-03,2025-05-06,approved
+sub-000275,clinic_register,K7,pr4,Garissa,Dadaab,2025-05-01,235.7,,ENUM-04,2025-06-04,approved
+sub-000276,clinic_register,K7,pr4,Garissa,Dadaab,2025-06-01,248.1,,ENUM-01,2025-07-04,approved
+sub-000277,clinic_register,K7,pr4,Garissa,Dadaab,2025-07-01,257.0,,ENUM-01,2025-08-05,approved
+sub-000278,clinic_register,K7,pr4,Garissa,Dadaab,2025-08-01,264.7,,ENUM-02,2025-09-04,approved
+sub-000279,clinic_register,K7,pr4,Garissa,Dadaab,2025-09-01,277.5,,ENUM-02,2025-10-04,approved
+sub-000280,clinic_register,K7,pr4,Garissa,Dadaab,2025-10-01,290.3,,ENUM-02,2025-11-03,approved
+sub-000281,clinic_register,K7,pr4,Garissa,Dadaab,2025-11-01,290.2,,ENUM-04,2025-12-04,approved
+sub-000282,clinic_register,K7,pr4,Garissa,Dadaab,2025-12-01,291.9,,ENUM-04,2026-01-08,approved
+sub-000283,clinic_register,K7,pr4,Garissa,Dadaab,2026-01-01,289.8,,ENUM-04,2026-02-04,approved
+sub-000284,clinic_register,K7,pr4,Garissa,Dadaab,2026-02-01,272.9,,ENUM-04,2026-03-09,approved
+sub-000285,clinic_register,K7,pr4,Garissa,Dadaab,2026-03-01,256.8,,ENUM-02,2026-04-06,approved
+sub-000286,clinic_register,K7,pr4,Garissa,Dadaab,2026-04-01,246.3,,ENUM-03,2026-05-08,approved
+sub-000287,clinic_register,K7,pr4,Garissa,Dadaab,2026-05-01,217.1,,ENUM-02,2026-06-10,approved
+sub-000288,clinic_register,K7,pr4,Garissa,Dadaab,2026-06-01,226.4,,ENUM-01,2026-07-06,approved
+sub-000289,portal_stats,K13,pr5,Nairobi,ALL,2025-01-01,5,,ENUM-01,2025-02-05,approved
+sub-000290,portal_stats,K13,pr5,Nairobi,ALL,2025-02-01,7,,ENUM-02,2025-03-05,approved
+sub-000291,portal_stats,K13,pr5,Nairobi,ALL,2025-03-01,9,,ENUM-03,2025-04-10,approved
+sub-000292,portal_stats,K13,pr5,Nairobi,ALL,2025-04-01,11,,ENUM-01,2025-05-10,approved
+sub-000293,portal_stats,K13,pr5,Nairobi,ALL,2025-05-01,13,,ENUM-03,2025-06-03,approved
+sub-000294,portal_stats,K13,pr5,Nairobi,ALL,2025-06-01,16,,ENUM-04,2025-07-07,approved
+sub-000295,portal_stats,K13,pr5,Nairobi,ALL,2025-07-01,18,,ENUM-01,2025-08-10,approved
+sub-000296,portal_stats,K13,pr5,Nairobi,ALL,2025-08-01,20,,ENUM-04,2025-09-05,approved
+sub-000297,portal_stats,K13,pr5,Nairobi,ALL,2025-09-01,22,,ENUM-02,2025-10-08,approved
+sub-000298,portal_stats,K13,pr5,Nairobi,ALL,2025-10-01,24,,ENUM-04,2025-11-05,approved
+sub-000299,portal_stats,K13,pr5,Nairobi,ALL,2025-11-01,26,,ENUM-02,2025-12-10,approved
+sub-000300,portal_stats,K13,pr5,Nairobi,ALL,2025-12-01,28,,ENUM-02,2026-01-06,approved
+sub-000301,portal_stats,K13,pr5,Nairobi,ALL,2026-01-01,30,,ENUM-01,2026-02-05,approved
+sub-000302,portal_stats,K13,pr5,Nairobi,ALL,2026-02-01,33,,ENUM-01,2026-03-09,approved
+sub-000303,portal_stats,K13,pr5,Nairobi,ALL,2026-03-01,35,,ENUM-01,2026-04-04,approved
+sub-000304,portal_stats,K13,pr5,Nairobi,ALL,2026-04-01,37,,ENUM-02,2026-05-07,approved
+sub-000305,portal_stats,K13,pr5,Nairobi,ALL,2026-05-01,39,,ENUM-01,2026-06-07,approved
+sub-000306,portal_stats,K13,pr5,Nairobi,ALL,2026-06-01,41,,ENUM-03,2026-07-10,approved
+sub-000307,portal_stats,K6,pr5,Nairobi,ALL,2025-01-01,1800,,ENUM-04,2025-02-08,approved
+sub-000308,portal_stats,K6,pr5,Nairobi,ALL,2025-02-01,2000,,ENUM-04,2025-03-08,approved
+sub-000309,portal_stats,K6,pr5,Nairobi,ALL,2025-03-01,2300,,ENUM-03,2025-04-10,approved
+sub-000310,portal_stats,K6,pr5,Nairobi,ALL,2025-04-01,2600,,ENUM-01,2025-05-09,approved
+sub-000311,portal_stats,K6,pr5,Nairobi,ALL,2025-05-01,2900,,ENUM-04,2025-06-10,approved
+sub-000312,portal_stats,K6,pr5,Nairobi,ALL,2025-06-01,3200,,ENUM-01,2025-07-08,approved
+sub-000313,portal_stats,K6,pr5,Nairobi,ALL,2025-07-01,3500,,ENUM-04,2025-08-09,approved
+sub-000314,portal_stats,K6,pr5,Nairobi,ALL,2025-08-01,3700,,ENUM-03,2025-09-04,approved
+sub-000315,portal_stats,K6,pr5,Nairobi,ALL,2025-09-01,3900,,ENUM-01,2025-10-03,approved
+sub-000316,portal_stats,K6,pr5,Nairobi,ALL,2025-10-01,4100,,ENUM-02,2025-11-07,approved
+sub-000317,portal_stats,K6,pr5,Nairobi,ALL,2025-11-01,4300,,ENUM-04,2025-12-09,approved
+sub-000318,portal_stats,K6,pr5,Nairobi,ALL,2025-12-01,4300,,ENUM-02,2026-01-08,approved
+sub-000319,portal_stats,K6,pr5,Nairobi,ALL,2026-01-01,4200,,ENUM-04,2026-02-04,approved
+sub-000320,portal_stats,K6,pr5,Nairobi,ALL,2026-02-01,3900,,ENUM-03,2026-03-04,approved
+sub-000321,portal_stats,K6,pr5,Nairobi,ALL,2026-03-01,3600,,ENUM-04,2026-04-08,approved
+sub-000322,portal_stats,K6,pr5,Nairobi,ALL,2026-04-01,3300,,ENUM-01,2026-05-10,approved
+sub-000323,portal_stats,K6,pr5,Nairobi,ALL,2026-05-01,3100,,ENUM-03,2026-06-10,approved
+sub-000324,portal_stats,K6,pr5,Nairobi,ALL,2026-06-01,3100,,ENUM-02,2026-07-04,approved
+sub-000325,training_register,K9,pr7,Kisumu,ALL,2025-01-01,40,,ENUM-04,2025-02-05,approved
+sub-000326,training_register,K9,pr7,Kisumu,ALL,2025-02-01,49,,ENUM-03,2025-03-06,approved
+sub-000327,training_register,K9,pr7,Kisumu,ALL,2025-03-01,58,,ENUM-04,2025-04-09,approved
+sub-000328,training_register,K9,pr7,Kisumu,ALL,2025-04-01,66,,ENUM-04,2025-05-07,approved
+sub-000329,training_register,K9,pr7,Kisumu,ALL,2025-05-01,75,,ENUM-03,2025-06-06,approved
+sub-000330,training_register,K9,pr7,Kisumu,ALL,2025-06-01,84,,ENUM-04,2025-07-03,approved
+sub-000331,training_register,K9,pr7,Kisumu,ALL,2025-07-01,93,,ENUM-04,2025-08-10,approved
+sub-000332,training_register,K9,pr7,Kisumu,ALL,2025-08-01,102,,ENUM-02,2025-09-05,approved
+sub-000333,training_register,K9,pr7,Kisumu,ALL,2025-09-01,111,,ENUM-01,2025-10-07,approved
+sub-000334,training_register,K9,pr7,Kisumu,ALL,2025-10-01,119,,ENUM-04,2025-11-05,approved
+sub-000335,training_register,K9,pr7,Kisumu,ALL,2025-11-01,128,,ENUM-01,2025-12-10,approved
+sub-000336,training_register,K9,pr7,Kisumu,ALL,2025-12-01,137,,ENUM-04,2026-01-09,approved
+sub-000337,training_register,K9,pr7,Kisumu,ALL,2026-01-01,146,,ENUM-01,2026-02-06,approved
+sub-000338,training_register,K9,pr7,Kisumu,ALL,2026-02-01,155,,ENUM-04,2026-03-05,approved
+sub-000339,training_register,K9,pr7,Kisumu,ALL,2026-03-01,164,,ENUM-03,2026-04-09,approved
+sub-000340,training_register,K9,pr7,Kisumu,ALL,2026-04-01,172,,ENUM-02,2026-05-10,approved
+sub-000341,training_register,K9,pr7,Kisumu,ALL,2026-05-01,181,,ENUM-04,2026-06-10,approved
+sub-000342,training_register,K9,pr7,Kisumu,ALL,2026-06-01,190,,ENUM-02,2026-07-10,approved
+sub-000343,business_followup,K3,pr2,Kisumu,ALL,2025-01-01,54,,ENUM-03,2025-02-06,approved
+sub-000344,business_followup,K3,pr2,Kisumu,ALL,2025-03-01,61,,ENUM-01,2025-04-07,approved
+sub-000345,business_followup,K3,pr2,Kisumu,ALL,2025-06-01,66,,ENUM-02,2025-07-10,approved
+sub-000346,business_followup,K3,pr2,Kisumu,ALL,2025-09-01,70,,ENUM-04,2025-10-05,approved
+sub-000347,business_followup,K3,pr2,Kisumu,ALL,2025-12-01,75,,ENUM-01,2026-01-05,approved
+sub-000348,business_followup,K3,pr2,Kisumu,ALL,2026-03-01,79,,ENUM-02,2026-04-09,approved
+sub-000349,business_followup,K3,pr2,Kisumu,ALL,2026-06-01,79,,ENUM-03,2026-07-04,approved
+sub-000350,business_followup,K11,pr2,Kisumu,ALL,2025-03-01,41,,ENUM-01,2025-04-06,approved
+sub-000351,business_followup,K11,pr2,Kisumu,ALL,2025-06-01,45,,ENUM-03,2025-07-04,approved
+sub-000352,business_followup,K11,pr2,Kisumu,ALL,2025-09-01,50,,ENUM-04,2025-10-03,approved
+sub-000353,business_followup,K11,pr2,Kisumu,ALL,2025-12-01,54,,ENUM-03,2026-01-06,approved
+sub-000354,business_followup,K11,pr2,Kisumu,ALL,2026-03-01,58,,ENUM-03,2026-04-08,approved
+sub-000355,business_followup,K11,pr2,Kisumu,ALL,2026-06-01,61,,ENUM-04,2026-07-06,approved
+sub-000356,clinic_register,K12,pr4,Garissa,ALL,2025-03-01,58,,ENUM-02,2025-04-03,approved
+sub-000357,clinic_register,K12,pr4,Garissa,ALL,2025-06-01,62,,ENUM-01,2025-07-04,approved
+sub-000358,clinic_register,K12,pr4,Garissa,ALL,2025-09-01,65,,ENUM-01,2025-10-05,approved
+sub-000359,clinic_register,K12,pr4,Garissa,ALL,2025-12-01,68,,ENUM-03,2026-01-03,approved
+sub-000360,clinic_register,K12,pr4,Garissa,ALL,2026-03-01,70,,ENUM-01,2026-04-09,approved
+sub-000361,clinic_register,K12,pr4,Garissa,ALL,2026-06-01,71,,ENUM-03,2026-07-06,approved
+sub-000362,vaccination_campaign,K5,pr6,Turkana,ALL,2025-03-01,40,,ENUM-01,2025-04-05,approved
+sub-000363,vaccination_campaign,K5,pr6,Turkana,ALL,2025-06-01,46,,ENUM-01,2025-07-09,approved
+sub-000364,vaccination_campaign,K5,pr6,Turkana,ALL,2025-09-01,51,,ENUM-03,2025-10-05,approved
+sub-000365,vaccination_campaign,K5,pr6,Turkana,ALL,2025-12-01,55,,ENUM-01,2026-01-04,approved
+sub-000366,vaccination_campaign,K5,pr6,Turkana,ALL,2026-03-01,59,,ENUM-03,2026-04-05,approved
+sub-000367,vaccination_campaign,K5,pr6,Turkana,ALL,2026-06-01,62,,ENUM-04,2026-07-06,approved
+sub-000368,cooperative_check,K8,pr8,Garissa,ALL,2025-03-01,12,,ENUM-03,2025-04-05,approved
+sub-000369,cooperative_check,K8,pr8,Garissa,ALL,2025-06-01,13,,ENUM-02,2025-07-04,approved
+sub-000370,cooperative_check,K8,pr8,Garissa,ALL,2025-09-01,11,,ENUM-01,2025-10-09,approved
+sub-000371,cooperative_check,K8,pr8,Garissa,ALL,2025-12-01,7,,ENUM-03,2026-01-03,approved
+sub-000372,cooperative_check,K8,pr8,Garissa,ALL,2026-03-01,4,,ENUM-04,2026-04-06,approved
+sub-000373,cooperative_check,K8,pr8,Garissa,ALL,2026-06-01,6,,ENUM-04,2026-07-07,approved

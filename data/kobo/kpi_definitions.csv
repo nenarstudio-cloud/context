@@ -1,0 +1,14 @@
+kpi_id,project_id,name,unit,target,direction,frequency,is_cumulative,form_id
+K1,pr1,Functional boreholes,%,90,higher_better,monthly,False,borehole_audit
+K2,pr1,People with safe water within 2 km,people,120000,higher_better,monthly,True,household_access
+K10,pr1,Active water committees,committees,28,higher_better,monthly,True,committee_register
+K3,pr2,12-month business survival,%,70,higher_better,quarterly,False,business_followup
+K11,pr2,Women reinvesting profit,%,60,higher_better,quarterly,False,business_followup
+K4,pr3,Youth placed in jobs,youth,600,higher_better,monthly,True,placement_tracker
+K7,pr4,Maternal clinic attendance,visits/month,1800,higher_better,monthly,False,clinic_register
+K12,pr4,Skilled birth attendance,%,75,higher_better,quarterly,False,clinic_register
+K13,pr5,Open datasets published,datasets,40,higher_better,monthly,True,portal_stats
+K6,pr5,Portal monthly active users,users,5000,higher_better,monthly,False,portal_stats
+K5,pr6,Livestock vaccination coverage,%,75,higher_better,quarterly,False,vaccination_campaign
+K9,pr7,Youth trained in digital skills,youth,500,higher_better,monthly,True,training_register
+K8,pr8,Cooperative disputes per quarter,disputes,6,lower_better,quarterly,False,cooperative_check
