@@ -14,3 +14,24 @@ export const config = {
   model: process.env.CONTEXT_MODEL ?? "claude-sonnet-5-5",
   stateDir: process.env.CONTEXT_STATE_DIR ?? ".context-state",
 };
+
+/**
+ * Which language model runs the investigation. Read lazily from the environment.
+ *  anthropic : ANTHROPIC_API_KEY (Claude API)
+ *  openai    : any OpenAI-compatible chat API (xAI, NVIDIA, Gemini compatibility endpoint, OpenRouter, Ollama...)
+ *              needs LLM_BASE_URL, LLM_API_KEY and LLM_MODEL
+ *  none      : replay mode (scripted, no model)
+ */
+export type LlmProvider = "anthropic" | "openai" | "none";
+export function llmSettings() {
+  return { baseUrl: (process.env.LLM_BASE_URL ?? "").replace(/\/+$/, ""), apiKey: process.env.LLM_API_KEY ?? "", model: process.env.LLM_MODEL ?? "" };
+}
+export function llmProvider(): LlmProvider {
+  if (process.env.ANTHROPIC_API_KEY) return "anthropic";
+  const l = llmSettings();
+  return l.baseUrl && l.apiKey && l.model ? "openai" : "none";
+}
+export function llmLabel(): string | null {
+  const p = llmProvider();
+  return p === "anthropic" ? config.model : p === "openai" ? llmSettings().model : null;
+}

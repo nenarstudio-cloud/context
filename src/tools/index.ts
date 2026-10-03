@@ -167,8 +167,10 @@ export const TOOLS: ToolDef[] = [
     run: async (a, c) => {
       const p = projectId(a.project_id); const title = String(a.title).slice(0, 200);
       if (c.dryRun) return { refs: [], note: "dry run: decision not stored", title };
-      const dup = (await c.writer.list("Pending")).find((d) => d.project_id === p && d.title === title);
-      if (dup) return { refs: [`ops.decisions:${dup.decision_id}`], decision_id: dup.decision_id, status: "Pending", note: "already proposed, not duplicated" };
+      // Never re-propose something already proposed or decided (approved, rejected or deferred) for the same project.
+      const norm = (t: string) => t.toLowerCase().replace(/[^a-z0-9 ]/g, "").replace(/\s+/g, " ").trim();
+      const dup = (await c.writer.list()).find((d) => d.project_id === p && norm(String(d.title)) === norm(title));
+      if (dup) return { refs: [`ops.decisions:${dup.decision_id}`], decision_id: dup.decision_id, status: dup.status, note: `already ${String(dup.status).toLowerCase()}, not proposed again` };
       const { decisionId } = await c.writer.propose({ projectId: p, title, rationale: String(a.rationale), evidenceRefs: (a.evidence_refs ?? []).map(String), createdBy: c.actor, createdAt: c.asOf });
       await c.memory.linkDecision(p, decisionId, title, c.findingIds);
       return { refs: [`ops.decisions:${decisionId}`], decision_id: decisionId, status: "Pending" };

@@ -11,7 +11,7 @@ async function until(f: () => boolean, ms = 8000) { const t = Date.now(); while 
 const s = await startServer({ port: 0, ephemeral: true });
 const base = `http://127.0.0.1:${s.port}`;
 try {
-  const dom = await JSDOM.fromURL(base + "/", {
+  const dom = await JSDOM.fromURL(base + "/console", {
     runScripts: "dangerously", pretendToBeVisual: true,
     beforeParse(w: any) { w.fetch = (u: string, o?: any) => fetch(new URL(u, base), o); w.TextDecoder = TextDecoder; w.alert = (m: string) => { throw new Error("alert: " + m); }; },
   });

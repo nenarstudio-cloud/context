@@ -47,3 +47,13 @@ You end with a password protected web address where you can ask questions, see c
 ## Cost control
 - Anyone with the password can spend your Anthropic credits. Limits are 30 questions per hour per session and 200 per day (MAX_ASKS_PER_HOUR, MAX_ASKS_PER_DAY). Also set a monthly spend limit in the Anthropic console.
 - AWS: the Zetaris setup runs a network gateway that AWS bills by the hour even with no cluster. When the hackathon is over, delete the CloudFormation stack in AWS.
+
+## Choosing the language model
+The app picks its model from environment variables in Render. Set one option:
+- **Claude:** `ANTHROPIC_API_KEY` (needs prepaid credits at platform.claude.com).
+- **Any OpenAI-compatible provider:** `LLM_BASE_URL`, `LLM_API_KEY` and `LLM_MODEL` together. Hackathon sponsors NVIDIA and xAI offer such APIs, and credits are often provided to participants. As far as I know the base URLs are `https://integrate.api.nvidia.com/v1` (NVIDIA) and `https://api.x.ai/v1` (xAI): confirm both, and the exact model names, in each provider's documentation.
+- **Nothing:** the app runs in scripted replay mode and says so on screen.
+After saving the variables, Render redeploys by itself. The top right badge turns green and shows the model name.
+
+## Updating the app later
+Upload the changed files to the same GitHub repo (or drag the whole folder in again: GitHub only records what changed) and commit. Render redeploys by itself in a minute or two.

@@ -5,7 +5,7 @@ import http from "node:http";
 import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
-import { config } from "../src/config.ts";
+import { config, llmProvider, llmLabel } from "../src/config.ts";
 import { createRuntime, seed } from "../src/runtime.ts";
 import { investigate, type AgentEvent } from "../src/agent/investigate.ts";
 import { replayInvestigate, replaySupported } from "../src/agent/replay.ts";
@@ -30,7 +30,7 @@ export async function startServer(o: ServerOptions = {}) {
   const secret = o.sessionSecret ?? process.env.SESSION_SECRET ?? crypto.randomBytes(32).toString("hex");
   const askPerHour = o.askPerHour ?? num(process.env.MAX_ASKS_PER_HOUR, 30);
   const askPerDay = o.askPerDay ?? num(process.env.MAX_ASKS_PER_DAY, 200);
-  const hasKey = o.hasKey ?? !!process.env.ANTHROPIC_API_KEY;
+  const hasKey = o.hasKey ?? llmProvider() !== "none";
   const kobo = createKoboHandler({ token: o.koboToken ?? process.env.KOBO_TOKEN, dir: o.koboDir ?? process.env.KOBO_DATA_DIR });
 
   const persisted = !ephemeral && fs.existsSync(config.stateDir);
@@ -73,6 +73,17 @@ export async function startServer(o: ServerOptions = {}) {
       if (kobo(req, res, url)) return;
       if (req.method === "GET" && url.pathname === "/healthz") return json(res, 200, { ok: true });
       if (req.method === "GET" && (url.pathname === "/" || url.pathname === "/index.html")) {
+        // The original demo, byte for byte, plus one script tag that plugs the real backend into it.
+        const html = fs.readFileSync(path.join(WEB, "demo.html"), "utf-8");
+        const i = html.lastIndexOf("</body>");
+        res.writeHead(200, { ...baseHeaders, "Content-Type": "text/html; charset=utf-8" });
+        return res.end(i < 0 ? html + '<script src="/bridge.js"></script>' : html.slice(0, i) + '<script src="/bridge.js"></script>\n' + html.slice(i));
+      }
+      if (req.method === "GET" && url.pathname === "/bridge.js") {
+        res.writeHead(200, { ...baseHeaders, "Content-Type": "application/javascript; charset=utf-8", "Cache-Control": "no-cache" }); return res.end(fs.readFileSync(path.join(WEB, "bridge.js")));
+      }
+      if (req.method === "GET" && url.pathname === "/console") {
+        // The compact engineering console (timeline, graph, decisions) kept for debugging.
         res.writeHead(200, { ...baseHeaders, "Content-Type": "text/html; charset=utf-8" }); return res.end(fs.readFileSync(path.join(WEB, "index.html")));
       }
       if (req.method === "POST" && url.pathname === "/api/login") {
@@ -87,7 +98,7 @@ export async function startServer(o: ServerOptions = {}) {
       if (url.pathname.startsWith("/api/") && !authed(req)) return json(res, 401, { error: "login required", login: true });
 
       if (req.method === "GET" && url.pathname === "/api/meta") {
-        return json(res, 200, { asOf: ctx.asOf, mode: hasKey ? "live" : "replay", model: hasKey ? config.model : null, dataMode: ctx.data.mode, graph: ctx.memory.stats(), supported: hasKey ? [] : replaySupported });
+        return json(res, 200, { asOf: ctx.asOf, mode: hasKey ? "live" : "replay", model: hasKey ? llmLabel() : null, dataMode: ctx.data.mode, graph: ctx.memory.stats(), supported: hasKey ? [] : replaySupported });
       }
       if (req.method === "GET" && url.pathname === "/api/projects") return json(res, 200, (await runTool("project_health", {}, ctx)).rows);
       if (req.method === "GET" && url.pathname === "/api/graph") {
@@ -144,8 +155,8 @@ export async function startServer(o: ServerOptions = {}) {
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   const s = await startServer();
-  const host = process.env.HOST ?? "127.0.0.1", live = !!process.env.ANTHROPIC_API_KEY;
-  console.log(`Context on http://${host}:${s.port}  (${live ? "LIVE model: " + config.model : "REPLAY mode: no ANTHROPIC_API_KEY"}; ${s.passwordProtected ? "password protected" : "NO PASSWORD"})`);
+  const host = process.env.HOST ?? "127.0.0.1", live = llmProvider() !== "none";
+  console.log(`Context on http://${host}:${s.port}  (${live ? `LIVE model: ${llmLabel()} via ${llmProvider()}` : "REPLAY mode: no model configured"}; ${s.passwordProtected ? "password protected" : "NO PASSWORD"})`);
   if (host !== "127.0.0.1" && host !== "localhost" && !s.passwordProtected) console.warn("WARNING: listening on a public interface without DEMO_PASSWORD. Anyone can approve decisions and spend your API credits.");
   process.on("SIGTERM", async () => { await s.stop(); process.exit(0); });
 }

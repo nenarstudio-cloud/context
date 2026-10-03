@@ -12,7 +12,9 @@
     "typecheck": "tsc --noEmit",
     "start": "tsx server/index.ts",
     "ui-test": "tsx scripts/ui-test.ts",
-    "deploy-test": "tsx scripts/deploy-test.ts"
+    "deploy-test": "tsx scripts/deploy-test.ts",
+    "llm-test": "tsx scripts/llm-test.ts",
+    "demo-test": "tsx scripts/demo-test.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.40.0",
