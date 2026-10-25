@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    ports:
+      - "127.0.0.1:5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-context}
+    volumes:
+      - context_pg_data:/var/lib/postgresql/data
+      - ./dataset/supabase_1_ops.sql:/docker-entrypoint-initdb.d/01_ops.sql:ro
+      - ./dataset/supabase_2_docs_kobo.sql:/docker-entrypoint-initdb.d/02_docs_kobo.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+volumes:
+  context_pg_data:
