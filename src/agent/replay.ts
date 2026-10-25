@@ -31,7 +31,7 @@ const cite = (r: { chunk_id?: string } | undefined) => (r?.chunk_id ? `[${r.chun
 export async function replayInvestigate(question: string, ctx: ToolContext, onEvent: (e: AgentEvent) => void): Promise<{ answer: string }> {
   const idx = route(question);
   if (idx < 0) {
-    const text = `Replay mode has no model, so it only understands these questions:\n${SUPPORTED.map((q, i) => `${i + 1}. ${q}`).join("\n")}\nSet ANTHROPIC_API_KEY on the server for live mode.`;
+    const text = `Sample mode has no model, so it only understands these questions:\n${SUPPORTED.map((q, i) => `${i + 1}. ${q}`).join("\n")}\nSet MODEL_API_KEY, MODEL_BASE_URL, and NEMOTRON_MODEL on the server for live mode.`;
     onEvent({ type: "answer", text }); return { answer: text };
   }
   let n = 0;

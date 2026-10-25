@@ -20,7 +20,7 @@ button{font:inherit;cursor:pointer}header{position:sticky;top:0;z-index:5;backgr
 nav{display:flex;gap:4px}nav button{border:0;background:none;padding:8px 14px;border-radius:999px;color:var(--dim);font-weight:500}nav button.on{background:var(--blue-wash);color:var(--blue)}
 .badge{display:inline-block;min-width:18px;padding:0 6px;margin-left:6px;border-radius:999px;background:var(--rose);color:#fff;font:600 11px/18px var(--sans);text-align:center}
 .sp{flex:1}.chip{font:500 12px var(--mono);padding:4px 10px;border-radius:999px;border:1px solid var(--line2);color:var(--dim)}
-.chip.live{background:var(--emerald-wash);color:var(--emerald);border-color:transparent}.chip.replay{background:var(--amber-wash);color:var(--amber);border-color:transparent}
+.chip.live{background:var(--emerald-wash);color:var(--emerald);border-color:transparent}.chip.sample{background:var(--amber-wash);color:var(--amber);border-color:transparent}
 main{max-width:1180px;margin:0 auto;padding:28px 20px 80px}.view{display:none}.view.on{display:block}
 h1{font:600 28px var(--display);letter-spacing:-.02em;margin:0 0 6px}.sub{color:var(--dim);margin:0 0 22px}
 .card{background:var(--raised);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:18px 20px}
@@ -146,7 +146,7 @@ async function ask(q){if(asking||!q.trim())return;asking=true;$("#go").disabled=
   }catch(e){$("#notice").replaceChildren(el("div",{class:"notice"},"Error: "+e.message))}
   asking=false;$("#go").disabled=false;refreshBadge()}
 function handle(e){
-  if(e.type==="start"&&e.mode==="replay")$("#notice").replaceChildren(el("div",{class:"notice"},"Replay mode: no language model is connected. The tool calls, retrieval, memory and graph are real, but the answer text is composed from templates, not model reasoning."));
+  if(e.type==="start"&&e.mode==="sample")$("#notice").replaceChildren(el("div",{class:"notice"},"Sample mode: no language model is connected. The tool calls, retrieval, memory and graph are real, but the answer text is composed from templates, not model reasoning."));
   else if(e.type==="tool")addStep(e);else if(e.type==="answer")renderAnswer(e.text);
   else if(e.type==="error")$("#notice").append(el("div",{class:"notice"},"Error: "+e.message))}
 $("#go").onclick=()=>ask($("#q").value);
@@ -194,7 +194,7 @@ async function loadDecisions(){const rows=await api("/api/decisions");const box=
 
 /* ---------- boot ---------- */
 async function boot(){$("#sugs").replaceChildren();try{META=await api("/api/meta")}catch(e){if(e.message!=='login required')$("#mode").textContent="server unreachable";return}
-  $("#asof").textContent="org date "+META.asOf;const m=$("#mode");m.className="chip";m.textContent=META.mode==="live"?"LIVE · "+META.model:"REPLAY · scripted, no model";m.classList.add(META.mode);
+  $("#asof").textContent="org date "+META.asOf;const m=$("#mode");m.className="chip";m.textContent=META.mode==="live"?"live · "+META.model:"sample";m.classList.add(META.mode);
   const sugs=META.supported.length?META.supported:["Why is Turkana Water Access at risk of missing its Q3 milestone?","Why is Garissa Maternal Health burning budget faster than it delivers?","What should we change before submitting the Nairobi Civic Tech Lab closeout report?","Which people or contracts create delivery risk in the next two weeks?"];
   sugs.forEach(s=>$("#sugs").append(el("button",{class:"sug",onclick:()=>{$("#q").value=s;ask(s)}},s)));refreshBadge()}
 boot();

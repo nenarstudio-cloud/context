@@ -14,6 +14,7 @@
     "ui-test": "tsx scripts/ui-test.ts",
     "deploy-test": "tsx scripts/deploy-test.ts",
     "llm-test": "tsx scripts/llm-test.ts",
+    "llm-live": "tsx scripts/llm-live.ts",
     "demo-test": "tsx scripts/demo-test.ts"
   },
   "dependencies": {

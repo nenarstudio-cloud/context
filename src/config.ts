@@ -15,18 +15,30 @@ export const config = {
   stateDir: process.env.CONTEXT_STATE_DIR ?? ".context-state",
 };
 
+/** Scripted answers (no model), even when API keys are present. */
+export function isSampleMode(): boolean {
+  return process.env.SAMPLE_MODE === "true";
+}
+
 /**
  * Which language model runs the investigation. Read lazily from the environment.
  *  anthropic : ANTHROPIC_API_KEY (Claude API)
- *  openai    : any OpenAI-compatible chat API (xAI, NVIDIA, Gemini compatibility endpoint, OpenRouter, Ollama...)
- *              needs LLM_BASE_URL, LLM_API_KEY and LLM_MODEL
- *  none      : replay mode (scripted, no model)
+ *  openai    : any OpenAI-compatible chat API (NVIDIA Nemotron, xAI, OpenRouter, Ollama...)
+ *              needs MODEL_BASE_URL (or LLM_BASE_URL), MODEL_API_KEY (or LLM_API_KEY),
+ *              and NEMOTRON_MODEL (or LLM_MODEL)
+ *  none      : sample / replay mode (scripted, no model)
  */
 export type LlmProvider = "anthropic" | "openai" | "none";
 export function llmSettings() {
-  return { baseUrl: (process.env.LLM_BASE_URL ?? "").replace(/\/+$/, ""), apiKey: process.env.LLM_API_KEY ?? "", model: process.env.LLM_MODEL ?? "" };
+  return {
+    baseUrl: (process.env.MODEL_BASE_URL ?? process.env.LLM_BASE_URL ?? "").replace(/\/+$/, ""),
+    apiKey: process.env.MODEL_API_KEY ?? process.env.LLM_API_KEY ?? "",
+    model: process.env.NEMOTRON_MODEL ?? process.env.LLM_MODEL ?? "",
+    fastModel: process.env.NEMOTRON_FAST_MODEL ?? "",
+  };
 }
 export function llmProvider(): LlmProvider {
+  if (isSampleMode()) return "none";
   if (process.env.ANTHROPIC_API_KEY) return "anthropic";
   const l = llmSettings();
   return l.baseUrl && l.apiKey && l.model ? "openai" : "none";
@@ -34,4 +46,8 @@ export function llmProvider(): LlmProvider {
 export function llmLabel(): string | null {
   const p = llmProvider();
   return p === "anthropic" ? config.model : p === "openai" ? llmSettings().model : null;
+}
+/** True when questions should go through the configured model (not scripted sample/replay). */
+export function agentIsLive(): boolean {
+  return llmProvider() !== "none";
 }

@@ -67,11 +67,11 @@ try {
   // ---- provider errors
   const down = await mock(() => ({ status: 500, message: null }));
   let msg = ""; try { await investigateOpenAI("x", ctx, { baseUrl: down.url, apiKey: "k", model: "m" }); } catch (e) { msg = (e as Error).message; }
-  check("provider 500 surfaces a clear error (no hang, no retry storm)", /model API error 500/.test(msg) && down.seen.length === 1);
+  check("provider 500 is retried once then surfaces HTTP status (no response body leak)", /model API HTTP 500/.test(msg) && down.seen.length === 2);
   down.close();
-  let n = 0; const flaky = await mock(() => (++n < 3 ? { status: 429, message: null } : { message: { role: "assistant", content: "ok after retries" } }));
+  let n = 0; const flaky = await mock(() => (++n < 2 ? { status: 429, message: null } : { message: { role: "assistant", content: "ok after retries" } }));
   const f = await investigateOpenAI("x", ctx, { baseUrl: flaky.url, apiKey: "k", model: "m", retryDelayMs: 5 });
-  check("rate limit (429) is retried and succeeds", f.answer === "ok after retries" && flaky.seen.length === 3);
+  check("rate limit (429) is retried once and succeeds", f.answer === "ok after retries" && flaky.seen.length === 2);
   flaky.close();
   const loop = await mock(() => ({ message: { role: "assistant", content: null, tool_calls: [call("x", "project_health", {})] } }));
   const lp = await investigateOpenAI("x", ctx, { baseUrl: loop.url, apiKey: "k", model: "m", maxTurns: 3 });
@@ -82,14 +82,26 @@ try {
   check("empty model response is an error", /no message/.test(e2));
   empty.close();
 
+  const r2 = await mock((turn) => (turn === 1 ? { message: { role: "assistant", content: "", reasoning_content: "internal chain-of-thought", tool_calls: [call("r1", "project_health", { project_id: "pr1" })] } } : { message: { role: "assistant", content: "Final answer only." } }));
+  const rr = await investigateOpenAI("x", ctx, { baseUrl: r2.url, apiKey: "k", model: "m", maxTurns: 5 });
+  check("reasoning is kept in trace but not shown as the answer", rr.answer === "Final answer only." && rr.reasoningTrace.some((t) => /chain-of-thought/.test(t)) && !/chain-of-thought/.test(rr.answer));
+  r2.close();
+
   // ---- provider selection from the environment
   const save = { ...process.env };
   delete process.env.ANTHROPIC_API_KEY; delete process.env.LLM_BASE_URL; delete process.env.LLM_API_KEY; delete process.env.LLM_MODEL;
-  check("no keys means replay mode", llmProvider() === "none" && llmLabel() === null);
-  process.env.LLM_BASE_URL = "https://api.example.com/v1/"; process.env.LLM_API_KEY = "k";
-  check("base URL and key without a model is still not configured", llmProvider() === "none");
-  process.env.LLM_MODEL = "some-model";
-  check("base URL, key and model select the OpenAI-compatible provider", llmProvider() === "openai" && llmLabel() === "some-model");
+  delete process.env.MODEL_BASE_URL; delete process.env.MODEL_API_KEY; delete process.env.NEMOTRON_MODEL; delete process.env.SAMPLE_MODE;
+  check("no keys means sample mode", llmProvider() === "none" && llmLabel() === null);
+  process.env.MODEL_BASE_URL = "https://integrate.api.nvidia.com/v1"; process.env.MODEL_API_KEY = "k";
+  check("MODEL base URL and key without a model is still not configured", llmProvider() === "none");
+  process.env.NEMOTRON_MODEL = "nvidia/nemotron";
+  check("MODEL_* vars select the OpenAI-compatible provider", llmProvider() === "openai" && llmLabel() === "nvidia/nemotron");
+  delete process.env.MODEL_BASE_URL; delete process.env.MODEL_API_KEY; delete process.env.NEMOTRON_MODEL;
+  process.env.LLM_BASE_URL = "https://api.example.com/v1/"; process.env.LLM_API_KEY = "k"; process.env.LLM_MODEL = "legacy-model";
+  check("LLM_* vars still work as fallbacks", llmProvider() === "openai" && llmLabel() === "legacy-model");
+  process.env.SAMPLE_MODE = "true";
+  check("SAMPLE_MODE forces sample even when keys are set", llmProvider() === "none");
+  delete process.env.SAMPLE_MODE;
   process.env.ANTHROPIC_API_KEY = "sk-ant-x";
   check("an Anthropic key takes precedence", llmProvider() === "anthropic");
   Object.assign(process.env, save);

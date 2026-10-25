@@ -20,7 +20,7 @@
   .ctxb-step{opacity:.55}.ctxb-step.ok{opacity:1}.ctxb-step.err{opacity:1;background:var(--rose-wash);color:var(--rose)}
   .ctxb-notice{margin:0 0 14px;padding:10px 14px;border-radius:var(--radius-sm);background:var(--amber-wash);color:#8a5a00;font-size:13px}
   .ctxb-pill{position:fixed;left:14px;bottom:14px;z-index:60;font:500 11px var(--mono);padding:5px 11px;border-radius:999px;background:var(--bg-raised);border:1px solid var(--hairline-strong);color:var(--ink-dim);box-shadow:var(--shadow-md)}
-  .ctxb-pill i{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;background:var(--amber)}.ctxb-pill.live i{background:var(--emerald)}
+  .ctxb-pill i{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;background:var(--amber)}.ctxb-pill.live i{background:var(--emerald)}.ctxb-pill.sample i{background:var(--amber)}
   .ctxb-livechips{margin-top:12px}.ctxb-livechips .lbl{font:600 11px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--blue);margin:0 0 8px}
   .ctxb-sec{font:600 12px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--blue);margin:22px 0 10px}
   .ctxb-sec.sample{color:var(--ink-faint);margin-top:34px}
@@ -110,7 +110,7 @@
     if (asking) return; asking = true;
     const stage = $("#answer-stage"); stage.hidden = false;
     stage.innerHTML = `<p class="answer-q">"${esc(question)}"</p>
-      ${META.mode === "replay" ? `<p class="ctxb-notice">Replay mode: no language model is connected. The data lookups, retrieval, memory and graph are real, but the answer text is composed from templates, not model reasoning.</p>` : ""}
+      ${META.mode === "sample" ? `<p class="ctxb-notice">Sample mode: no language model is connected. The data lookups, retrieval, memory and graph are real, but the answer text is composed from templates, not model reasoning.</p>` : ""}
       <p class="answer-intro" id="ctxb-intro">Investigating across operations data, field surveys, documents and organizational memory…</p>
       <p class="answer-advisor-label">I'm analysing</p>
       <div class="answer-sources" id="ctxb-steps" style="margin-bottom:18px;"></div><div id="ctxb-body"></div>`;
@@ -201,13 +201,13 @@
   async function boot() {
     try { META = await api("/api/meta"); } catch { return; }
     pill.className = "ctxb-pill " + META.mode;
-    pill.innerHTML = `<i></i>${META.mode === "live" ? "Live agent · " + esc(META.model) : "Replay · no model connected"}`;
-    pill.title = META.mode === "live" ? "Questions are answered by the live agent over your data." : "No language model is connected. Four live investigations run as a scripted replay; other questions use the original demo answers.";
+    pill.innerHTML = `<i></i>${META.mode === "live" ? "live · " + esc(META.model) : "sample"}`;
+    pill.title = META.mode === "live" ? "Questions are answered by the live agent over your data." : "No language model is connected. Four investigations run as scripted sample answers; other questions use the original demo answers.";
     const wrap = document.querySelector(".ask-suggestions");
     if (wrap && !$("#ctxb-livechips")) {
       const qs = META.supported.length ? META.supported : ["Why is Turkana Water Access at risk of missing its Q3 milestone?", "Why is Garissa Maternal Health burning budget faster than it delivers?", "What should we change before submitting the Nairobi Civic Tech Lab closeout report?", "Which people or contracts create delivery risk in the next two weeks?"];
       const live = document.createElement("div"); live.id = "ctxb-livechips"; live.className = "ctxb-livechips";
-      live.innerHTML = `<p class="lbl">Live investigations${META.mode === "replay" ? " (replay)" : ""}</p>`;
+      live.innerHTML = `<p class="lbl">Live investigations${META.mode === "sample" ? " (sample)" : ""}</p>`;
       qs.forEach((q) => { const b = document.createElement("button"); b.type = "button"; b.className = "suggestion-chip"; b.textContent = q; b.onclick = () => { const i = $("#ask-input"); if (i) i.value = q; window.handleAsk(q); }; live.appendChild(b); });
       wrap.after(live);
     }

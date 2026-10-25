@@ -42,7 +42,7 @@ try {
   const { w, errors } = await open(base);
   const d = w.document, $ = (q: string) => d.querySelector(q);
   check("original demo boots with its connect and first screens", await until(() => !!$("#firstscreen") && !!$("#app-shell") && typeof w.handleAsk === "function"));
-  check("bridge loaded: mode pill shows replay", await until(() => /Replay/.test($("#ctxb-pill")?.textContent ?? "")));
+  check("bridge loaded: mode pill shows sample", await until(() => /sample/i.test($("#ctxb-pill")?.textContent ?? "")));
   check("original sidebar has all 12 sections intact", d.querySelectorAll(".sidebar-item").length >= 11);
   d.getElementById("app-shell").hidden = false; d.getElementById("firstscreen").hidden = true;
 

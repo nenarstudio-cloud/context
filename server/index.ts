@@ -5,7 +5,7 @@ import http from "node:http";
 import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
-import { config, llmProvider, llmLabel } from "../src/config.ts";
+import { config, agentIsLive, llmLabel } from "../src/config.ts";
 import { createRuntime, seed } from "../src/runtime.ts";
 import { investigate, type AgentEvent } from "../src/agent/investigate.ts";
 import { replayInvestigate, replaySupported } from "../src/agent/replay.ts";
@@ -30,7 +30,7 @@ export async function startServer(o: ServerOptions = {}) {
   const secret = o.sessionSecret ?? process.env.SESSION_SECRET ?? crypto.randomBytes(32).toString("hex");
   const askPerHour = o.askPerHour ?? num(process.env.MAX_ASKS_PER_HOUR, 30);
   const askPerDay = o.askPerDay ?? num(process.env.MAX_ASKS_PER_DAY, 200);
-  const hasKey = o.hasKey ?? llmProvider() !== "none";
+  const hasKey = o.hasKey ?? agentIsLive();
   const kobo = createKoboHandler({ token: o.koboToken ?? process.env.KOBO_TOKEN, dir: o.koboDir ?? process.env.KOBO_DATA_DIR });
 
   const persisted = !ephemeral && fs.existsSync(config.stateDir);
@@ -98,7 +98,7 @@ export async function startServer(o: ServerOptions = {}) {
       if (url.pathname.startsWith("/api/") && !authed(req)) return json(res, 401, { error: "login required", login: true });
 
       if (req.method === "GET" && url.pathname === "/api/meta") {
-        return json(res, 200, { asOf: ctx.asOf, mode: hasKey ? "live" : "replay", model: hasKey ? llmLabel() : null, dataMode: ctx.data.mode, graph: ctx.memory.stats(), supported: hasKey ? [] : replaySupported });
+        return json(res, 200, { asOf: ctx.asOf, mode: hasKey ? "live" : "sample", model: hasKey ? llmLabel() : null, dataMode: ctx.data.mode, graph: ctx.memory.stats(), supported: hasKey ? [] : replaySupported });
       }
       if (req.method === "GET" && url.pathname === "/api/projects") return json(res, 200, (await runTool("project_health", {}, ctx)).rows);
       if (req.method === "GET" && url.pathname === "/api/graph") {
@@ -135,7 +135,7 @@ export async function startServer(o: ServerOptions = {}) {
         const send = (e: unknown) => res.write(`data: ${JSON.stringify(e)}\n\n`);
         const run = async () => {
           const live = hasKey && b.mode !== "replay";
-          send({ type: "start", mode: live ? "live" : "replay" }); ctx.findingIds.length = 0;
+          send({ type: "start", mode: live ? "live" : "sample" }); ctx.findingIds.length = 0;
           try { if (live) await investigate(question, ctx, { onEvent: (e: AgentEvent) => send(e) }); else await replayInvestigate(question, ctx, (e) => send(e)); }
           catch (e) { console.error("investigation failed:", (e as Error).message); send({ type: "error", message: "The investigation failed. Check the server log." }); }
           send({ type: "done", graph: ctx.memory.stats() }); res.end();
@@ -155,8 +155,8 @@ export async function startServer(o: ServerOptions = {}) {
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   const s = await startServer();
-  const host = process.env.HOST ?? "127.0.0.1", live = llmProvider() !== "none";
-  console.log(`Context on http://${host}:${s.port}  (${live ? `LIVE model: ${llmLabel()} via ${llmProvider()}` : "REPLAY mode: no model configured"}; ${s.passwordProtected ? "password protected" : "NO PASSWORD"})`);
+  const host = process.env.HOST ?? "127.0.0.1", live = agentIsLive();
+  console.log(`Context on http://${host}:${s.port}  (${live ? `live · ${llmLabel()}` : "sample"}; ${s.passwordProtected ? "password protected" : "NO PASSWORD"})`);
   if (host !== "127.0.0.1" && host !== "localhost" && !s.passwordProtected) console.warn("WARNING: listening on a public interface without DEMO_PASSWORD. Anyone can approve decisions and spend your API credits.");
   process.on("SIGTERM", async () => { await s.stop(); process.exit(0); });
 }

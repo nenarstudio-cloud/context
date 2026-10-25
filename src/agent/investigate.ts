@@ -10,6 +10,8 @@ export type AgentEvent =
 export interface InvestigationResult {
   answer: string; turns: number;
   toolCalls: { name: string; args: unknown; ok: boolean; refs: string[] }[];
+  /** Reasoning/thinking tokens from the provider (never shown to the user). */
+  reasoningTrace: string[];
 }
 
 /**
@@ -21,6 +23,7 @@ export async function investigateAnthropic(question: string, ctx: ToolContext, o
   const client = opts.client ?? new Anthropic();
   const messages: Anthropic.MessageParam[] = [{ role: "user", content: question }];
   const trace: InvestigationResult["toolCalls"] = [];
+  const reasoningTrace: string[] = [];
   const maxTurns = opts.maxTurns ?? 10;
   for (let turn = 1; turn <= maxTurns; turn++) {
     const res = await client.messages.create({
@@ -32,7 +35,7 @@ export async function investigateAnthropic(question: string, ctx: ToolContext, o
     if (res.stop_reason !== "tool_use" || !uses.length) {
       const answer = res.content.filter((b): b is Anthropic.TextBlock => b.type === "text").map((b) => b.text).join("\n");
       opts.onEvent?.({ type: "answer", text: answer });
-      return { answer, turns: turn, toolCalls: trace };
+      return { answer, turns: turn, toolCalls: trace, reasoningTrace };
     }
     const results = await Promise.all(uses.map(async (u) => {
       opts.onEvent?.({ type: "tool", id: u.id, name: u.name, args: u.input, status: "running" });
@@ -49,7 +52,7 @@ export async function investigateAnthropic(question: string, ctx: ToolContext, o
     }));
     messages.push({ role: "user", content: results });
   }
-  return { answer: "Stopped: turn limit reached before a final answer.", turns: maxTurns, toolCalls: trace };
+  return { answer: "Stopped: turn limit reached before a final answer.", turns: maxTurns, toolCalls: trace, reasoningTrace };
 }
 
 export function summarize(r: { rows?: unknown[]; note?: string; [k: string]: unknown }): string {
@@ -62,13 +65,47 @@ export function summarize(r: { rows?: unknown[]; note?: string; [k: string]: unk
 type OpenAIToolCall = { id?: string; type?: string; function: { name: string; arguments: string } };
 type OpenAIMessage = { role: "system" | "user" | "assistant" | "tool"; content: string | null; tool_calls?: OpenAIToolCall[]; tool_call_id?: string };
 
+function isFetchTimeout(err: unknown): boolean {
+  return err instanceof Error && (err.name === "TimeoutError" || err.name === "AbortError");
+}
+
+function shouldRetryHttp(status: number): boolean {
+  return status === 429 || (status >= 500 && status <= 599);
+}
+
 async function chat(url: string, key: string, body: unknown, retryDelayMs: number): Promise<any> {
-  for (let attempt = 0; ; attempt++) {
-    const res = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${key}` }, body: JSON.stringify(body), signal: AbortSignal.timeout(120_000) });
-    if (res.ok) return res.json();
-    if ([429, 502, 503, 504].includes(res.status) && attempt < 2) { await new Promise((r) => setTimeout(r, retryDelayMs * (attempt + 1))); continue; }
-    throw new Error(`model API error ${res.status}: ${(await res.text()).slice(0, 300)}`);
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const res = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${key}` }, body: JSON.stringify(body), signal: AbortSignal.timeout(120_000) });
+      if (res.ok) return res.json();
+      if (attempt === 0 && shouldRetryHttp(res.status)) {
+        await new Promise((r) => setTimeout(r, retryDelayMs));
+        continue;
+      }
+      throw new Error(`model API HTTP ${res.status}`);
+    } catch (e) {
+      if (attempt === 0 && isFetchTimeout(e)) {
+        await new Promise((r) => setTimeout(r, retryDelayMs));
+        continue;
+      }
+      throw e;
+    }
   }
+  throw new Error("model API request failed");
+}
+
+function reasoningFromMessage(msg: Record<string, unknown>): string | null {
+  for (const k of ["reasoning_content", "reasoning", "thinking"] as const) {
+    const v = msg[k];
+    if (typeof v === "string" && v.trim()) return v;
+  }
+  return null;
+}
+
+function traceReasoning(reasoningTrace: string[], thinking: string | null) {
+  if (!thinking) return;
+  reasoningTrace.push(thinking);
+  console.error("[llm trace] reasoning:", thinking.length > 8000 ? thinking.slice(0, 8000) + "…" : thinking);
 }
 
 /**
@@ -82,17 +119,19 @@ export async function investigateOpenAI(question: string, ctx: ToolContext, opts
   const tools = anthropicTools.map((t) => ({ type: "function", function: { name: t.name, description: t.description, parameters: t.input_schema } }));
   const messages: OpenAIMessage[] = [{ role: "system", content: SYSTEM_PROMPT(ctx.asOf) }, { role: "user", content: question }];
   const trace: InvestigationResult["toolCalls"] = [];
+  const reasoningTrace: string[] = [];
   const maxTurns = opts.maxTurns ?? 10;
   for (let turn = 1; turn <= maxTurns; turn++) {
     const data = await chat(`${baseUrl}/chat/completions`, apiKey, { model, messages, tools, tool_choice: "auto", max_tokens: 4096 }, opts.retryDelayMs ?? 1500);
     const msg = data?.choices?.[0]?.message;
     if (!msg) throw new Error("model API returned no message");
+    traceReasoning(reasoningTrace, reasoningFromMessage(msg as Record<string, unknown>));
     const calls: OpenAIToolCall[] = Array.isArray(msg.tool_calls) ? msg.tool_calls : [];
     messages.push({ role: "assistant", content: msg.content ?? null, ...(calls.length ? { tool_calls: calls } : {}) });
     if (!calls.length) {
       const answer = String(msg.content ?? "").trim();
       opts.onEvent?.({ type: "answer", text: answer });
-      return { answer, turns: turn, toolCalls: trace };
+      return { answer, turns: turn, toolCalls: trace, reasoningTrace };
     }
     const results = await Promise.all(calls.map(async (c, i) => {
       const id = c.id ?? `call_${turn}_${i}`; const name = c.function?.name ?? "";
@@ -112,7 +151,7 @@ export async function investigateOpenAI(question: string, ctx: ToolContext, opts
     }));
     messages.push(...results);
   }
-  return { answer: "Stopped: turn limit reached before a final answer.", turns: maxTurns, toolCalls: trace };
+  return { answer: "Stopped: turn limit reached before a final answer.", turns: maxTurns, toolCalls: trace, reasoningTrace };
 }
 
 /** Picks the configured model provider. */
@@ -120,5 +159,5 @@ export async function investigate(question: string, ctx: ToolContext, opts: { ma
   const p = llmProvider();
   if (p === "anthropic") return investigateAnthropic(question, ctx, opts);
   if (p === "openai") return investigateOpenAI(question, ctx, opts);
-  throw new Error("no model configured: set ANTHROPIC_API_KEY, or LLM_BASE_URL + LLM_API_KEY + LLM_MODEL");
+  throw new Error("no model configured: set MODEL_BASE_URL + MODEL_API_KEY + NEMOTRON_MODEL (or LLM_* / ANTHROPIC_API_KEY), and SAMPLE_MODE≠true");
 }

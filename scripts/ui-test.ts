@@ -16,13 +16,13 @@ try {
     beforeParse(w: any) { w.fetch = (u: string, o?: any) => fetch(new URL(u, base), o); w.TextDecoder = TextDecoder; w.alert = (m: string) => { throw new Error("alert: " + m); }; },
   });
   const w: any = dom.window, d = w.document, $ = (q: string) => d.querySelector(q);
-  check("page boots and shows mode and org date", await until(() => /REPLAY/.test($("#mode").textContent) && /2026-07-06/.test($("#asof").textContent)));
+  check("page boots and shows mode and org date", await until(() => /sample/i.test($("#mode").textContent) && /2026-07-06/.test($("#asof").textContent)));
   check("suggested questions rendered", d.querySelectorAll(".sug").length === 4);
 
   // Ask the Turkana question
   d.querySelectorAll(".sug")[0].click();
   check("answer renders", await until(() => !$("#answer").hidden && /Recommended actions/.test($("#answer").textContent)));
-  check("replay notice is shown (no model)", /Replay mode/.test($("#notice").textContent));
+  check("sample notice is shown (no model)", /Sample mode/.test($("#notice").textContent));
   check("tool timeline shows parallel investigators, all ok", d.querySelectorAll(".step").length >= 12 && d.querySelectorAll(".step .dot.ok").length === d.querySelectorAll(".step").length, String(d.querySelectorAll(".step").length));
   const docPills = [...d.querySelectorAll("#answer button.pill")].map((b: any) => b.textContent);
   check("answer has clickable document citations", docPills.length >= 4 && docPills.every((t: string) => /^doc-\d{3}#\d+$/.test(t)), docPills.join(","));
