@@ -35,7 +35,8 @@
   #ctxb-login h2{font:700 22px var(--display);margin:0 0 6px}#ctxb-login p{color:var(--ink-dim);margin:0 0 6px}
   #ctxb-login input{width:100%;padding:12px 14px;border-radius:var(--radius-sm);border:1px solid var(--hairline-strong);font:inherit;margin:12px 0}
   #ctxb-login button{width:100%;padding:12px;border:0;border-radius:var(--radius-sm);background:var(--blue);color:#fff;font-weight:600;cursor:pointer}
-  #ctxb-login .err{color:var(--rose);font-size:13px;min-height:20px}`;
+  #ctxb-login .err{color:var(--rose);font-size:13px;min-height:20px}
+  .ctxb-role{background:var(--violet-wash);color:var(--violet);font-weight:600}.ctxb-role.err{background:var(--rose-wash);color:var(--rose)}`;
   document.head.appendChild(css);
 
   /* ---------- helpers ---------- */
@@ -115,7 +116,14 @@
       <p class="answer-advisor-label">I'm analysing</p>
       <div class="answer-sources" id="ctxb-steps" style="margin-bottom:18px;"></div><div id="ctxb-body"></div>`;
     if (stage.scrollIntoView) stage.scrollIntoView({ behavior: "smooth", block: "center" });
-    const evidence = new Set(); const findings = []; let lookups = 0, proposed = 0, answerText = "", failed = null;
+    const evidence = new Set(); const findings = []; let lookups = 0, proposed = 0, answerText = "", failed = null, runInfo = null, fellBack = null;
+    const roleStep = (e) => {
+      let s = document.getElementById("ctxb-r-" + e.id);
+      if (!s) { s = document.createElement("span"); s.id = "ctxb-r-" + e.id; $("#ctxb-steps").appendChild(s); }
+      const mark = e.status === "ok" ? " ✓" : e.status === "error" ? " ✕" : " …";
+      s.textContent = e.role + (e.status !== "running" && e.note ? " · " + e.note : "") + mark;
+      s.className = "source-tag ctxb-step ctxb-role" + (e.status === "ok" ? " ok" : e.status === "error" ? " err" : "");
+    };
     const step = (e) => {
       let s = document.getElementById("ctxb-s-" + e.id);
       if (!s) { s = document.createElement("span"); s.id = "ctxb-s-" + e.id; s.className = "source-tag ctxb-step"; $("#ctxb-steps").appendChild(s); }
@@ -137,19 +145,20 @@
         while ((i = buf.indexOf("\n\n")) >= 0) {
           const chunk = buf.slice(0, i); buf = buf.slice(i + 2); if (!chunk.startsWith("data: ")) continue;
           const e = JSON.parse(chunk.slice(6));
-          if (e.type === "tool") step(e); else if (e.type === "answer") answerText = e.text; else if (e.type === "error") failed = e.message;
+          if (e.type === "tool") step(e); else if (e.type === "role") roleStep(e); else if (e.type === "fallback") fellBack = e.reason; else if (e.type === "done") runInfo = e.run || null; else if (e.type === "answer") answerText = e.text; else if (e.type === "error") failed = e.message;
         }
       }
     } catch (e) { failed = e.message; }
     asking = false;
     if (failed && !answerText) { $("#ctxb-intro").textContent = "Context could not finish this investigation: " + failed; return; }
-    renderLive(question, answerText, { evidence, findings, lookups, proposed });
+    renderLive(question, answerText, { evidence, findings, lookups, proposed, run: runInfo, fellBack });
     refreshDecisions();
   }
 
   function renderLive(question, text, m) {
     const a = parseAnswer(text); const body = $("#ctxb-body");
     $("#ctxb-intro").innerHTML = cites(a.structured ? a.Answer || "" : text);
+    if (m.fellBack) $("#ctxb-intro").insertAdjacentHTML("beforebegin", `<p class="ctxb-notice">The live model could not complete this investigation (${esc(m.fellBack)}). This answer is scripted sample text, not model reasoning.</p>`);
     a.Evidence.concat(a["Recommended actions"], [a.Pattern]).join(" ").replace(/\[([^\]]+)\]/g, (x, inner) => inner.split(/[,;]\s*/).forEach((r) => CHUNK.test(r.trim()) && m.evidence.add(r.trim())));
     const list = (arr, tag) => arr.length ? `<${tag} class="answer-points">${arr.map((x) => `<li>${cites(x)}</li>`).join("")}</${tag}>` : "";
     const conf = m.findings.length ? Math.round((100 * m.findings.reduce((s, x) => s + x, 0)) / m.findings.length) : null;
@@ -159,12 +168,23 @@
       ${a["Recommended actions"].length ? `<p class="answer-advisor-label">Recommendation</p>${list(a["Recommended actions"], "ol")}` : ""}
       ${a["Confidence and gaps"] ? `<p class="answer-advisor-label">Confidence and gaps</p><p class="answer-intro" style="margin-bottom:0;">${cites(a["Confidence and gaps"])}</p>` : ""}
       ${conf !== null ? `<div class="answer-confidence"><span class="confidence-badge">Confidence ${conf}%</span></div>` : ""}
-      <div class="answer-meta-row"><span><b>${m.lookups}</b> data lookups</span><span><b>${m.evidence.size}</b> evidence paragraphs</span><span>Last updated <b>just now</b></span></div>
+      <div class="answer-meta-row"><span><b>${m.lookups}</b> data lookups</span><span><b>${m.evidence.size}</b> evidence paragraphs</span><span>Last updated <b>just now</b></span>${m.run && m.run.verdict ? `<span>Evaluator <b>${m.run.verdict === "pass" ? "passed" : "passed with caveats"}</b> after <b>${m.run.rounds}</b> revision round${m.run.rounds === 1 ? "" : "s"}</span>` : ""}</div>
       <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;">
         ${m.proposed ? `<button class="briefing-decide-btn" type="button" id="ctxb-review">Review ${m.proposed} proposed decision${m.proposed > 1 ? "s" : ""} →</button>` : ""}
-        <button class="answer-close" type="button" id="ctxb-close">Close</button></div>`;
+        ${m.run && m.run.run_id && !m.run.fallback ? `<button class="answer-close" type="button" id="ctxb-trace">View agent trace</button>` : ""}<button class="answer-close" type="button" id="ctxb-close">Close</button></div>`;
     const rv = $("#ctxb-review"); if (rv) rv.onclick = () => window.switchView("decide");
+    const tb = $("#ctxb-trace"); if (tb) tb.onclick = () => showTrace(m.run.run_id);
     $("#ctxb-close").onclick = () => { $("#answer-stage").hidden = true; };
+  }
+
+  /* ---------- agent trace ---------- */
+  async function showTrace(runId) {
+    const body = $("#ctxb-pbody"); panel.classList.add("on"); body.textContent = "Loading…";
+    try {
+      const t = await api("/api/trace/" + encodeURIComponent(runId));
+      const rows = (t.events || []).map((x) => `<div class="para"><div class="tg">${esc(x.role)} · ${esc(x.action)}${x.tool ? " · " + esc(x.tool) : ""}</div>${x.args_summary ? `<div class="mt">${esc(x.args_summary)}</div>` : ""}<div>${esc(x.note || "")}</div><div class="mt">${(x.t / 1000).toFixed(1)}s${x.ms ? " · " + x.ms + " ms" : ""}${x.ok ? "" : " · failed"}</div></div>`).join("");
+      body.innerHTML = `<strong>Agent trace</strong><div class="mt">${esc(t.run_id)} · ${Math.round((t.ms || 0) / 1000)}s${t.verdict ? " · " + esc(t.verdict) : ""}</div>${rows}`;
+    } catch (e) { body.textContent = e.message; }
   }
 
   /* ---------- live Actions ---------- */
@@ -201,7 +221,7 @@
   async function boot() {
     try { META = await api("/api/meta"); } catch { return; }
     pill.className = "ctxb-pill " + META.mode;
-    pill.innerHTML = `<i></i>${META.mode === "live" ? "live · " + esc(META.model) : "sample"}`;
+    pill.innerHTML = `<i></i>${META.mode === "live" ? "live · " + esc(META.model) + (META.roles ? " · 4 agents" : "") : "sample"}`;
     pill.title = META.mode === "live" ? "Questions are answered by the live agent over your data." : "No language model is connected. Four investigations run as scripted sample answers; other questions use the original demo answers.";
     const wrap = document.querySelector(".ask-suggestions");
     if (wrap && !$("#ctxb-livechips")) {

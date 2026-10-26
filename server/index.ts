@@ -5,10 +5,14 @@ import http from "node:http";
 import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
-import { config, agentIsLive, llmLabel } from "../src/config.ts";
+import { pathToFileURL } from "node:url";
+import { config, agentIsLive, llmLabel, llmProvider } from "../src/config.ts";
 import { createRuntime, seed } from "../src/runtime.ts";
 import { investigate, type AgentEvent } from "../src/agent/investigate.ts";
 import { replayInvestigate, replaySupported } from "../src/agent/replay.ts";
+import { runTeam } from "../src/agent/orchestrator.ts";
+import { readTrace } from "../src/agent/trace.ts";
+import type { TeamEvent } from "../src/agent/roles/types.ts";
 import { runTool } from "../src/tools/index.ts";
 import { lit, projectId, T } from "../src/tools/sql.ts";
 import { createKoboHandler } from "./kobo.ts";
@@ -31,6 +35,8 @@ export async function startServer(o: ServerOptions = {}) {
   const askPerHour = o.askPerHour ?? num(process.env.MAX_ASKS_PER_HOUR, 30);
   const askPerDay = o.askPerDay ?? num(process.env.MAX_ASKS_PER_DAY, 200);
   const hasKey = o.hasKey ?? agentIsLive();
+  /** The four role team runs on OpenAI compatible models (Nemotron). CONTEXT_ROLES=off returns to the single loop. */
+  const teamOn = () => hasKey && llmProvider() === "openai" && process.env.CONTEXT_ROLES !== "off";
   const kobo = createKoboHandler({ token: o.koboToken ?? process.env.KOBO_TOKEN, dir: o.koboDir ?? process.env.KOBO_DATA_DIR });
 
   const persisted = !ephemeral && fs.existsSync(config.stateDir);
@@ -98,7 +104,11 @@ export async function startServer(o: ServerOptions = {}) {
       if (url.pathname.startsWith("/api/") && !authed(req)) return json(res, 401, { error: "login required", login: true });
 
       if (req.method === "GET" && url.pathname === "/api/meta") {
-        return json(res, 200, { asOf: ctx.asOf, mode: hasKey ? "live" : "sample", model: hasKey ? llmLabel() : null, dataMode: ctx.data.mode, graph: ctx.memory.stats(), supported: hasKey ? [] : replaySupported });
+        return json(res, 200, { asOf: ctx.asOf, mode: hasKey ? "live" : "sample", model: hasKey ? llmLabel() : null, roles: teamOn(), fastModel: hasKey && teamOn() ? (process.env.NEMOTRON_FAST_MODEL || null) : null, dataMode: ctx.data.mode, graph: ctx.memory.stats(), supported: hasKey ? [] : replaySupported });
+      }
+      if (req.method === "GET" && url.pathname.startsWith("/api/trace/")) {
+        const t = readTrace(config.stateDir, decodeURIComponent(url.pathname.slice("/api/trace/".length)));
+        return t ? json(res, 200, t) : json(res, 404, { error: "trace not found" });
       }
       if (req.method === "GET" && url.pathname === "/api/projects") return json(res, 200, (await runTool("project_health", {}, ctx)).rows);
       if (req.method === "GET" && url.pathname === "/api/graph") {
@@ -136,9 +146,30 @@ export async function startServer(o: ServerOptions = {}) {
         const run = async () => {
           const live = hasKey && b.mode !== "replay";
           send({ type: "start", mode: live ? "live" : "sample" }); ctx.findingIds.length = 0;
-          try { if (live) await investigate(question, ctx, { onEvent: (e: AgentEvent) => send(e) }); else await replayInvestigate(question, ctx, (e) => send(e)); }
+          let runInfo: Record<string, unknown> | undefined;
+          try {
+            if (live && teamOn()) {
+              try {
+                const r = await runTeam(question, ctx, { emit: (e: TeamEvent) => send(e) });
+                runInfo = { run_id: r.runId, rounds: r.rounds, verdict: r.verdict, findings: r.findings, dropped: r.dropped, decisions: r.decisions, ms: r.ms, critic: r.criticRan };
+              } catch (e) {
+                // The live team failed (model unreachable, time limit, nothing verified). Say so, then fall back to the scripted path.
+                const reason = (e as Error).message;
+                console.error("team run failed:", reason);
+                runInfo = { run_id: (e as { runId?: string }).runId, fallback: true };
+                send({ type: "fallback", reason });
+                let notice = false;
+                await replayInvestigate(question, ctx, (ev) => {
+                  if (ev.type === "answer" && ev.text.startsWith("Sample mode has no model")) { notice = true; send({ type: "error", message: `The live model could not complete this investigation (${reason}). Try again in a minute.` }); }
+                  else send(ev);
+                });
+                if (notice) runInfo.fallback = "unavailable";
+              }
+            } else if (live) await investigate(question, ctx, { onEvent: (e: AgentEvent) => send(e) });
+            else await replayInvestigate(question, ctx, (e) => send(e));
+          }
           catch (e) { console.error("investigation failed:", (e as Error).message); send({ type: "error", message: "The investigation failed. Check the server log." }); }
-          send({ type: "done", graph: ctx.memory.stats() }); res.end();
+          send({ type: "done", graph: ctx.memory.stats(), ...(runInfo ? { run: runInfo } : {}) }); res.end();
         };
         busy = busy.then(run, run); return;
       }
@@ -153,10 +184,10 @@ export async function startServer(o: ServerOptions = {}) {
   return { port: addr.port, stop: async () => { await new Promise((r) => server.close(r)); await close(); }, ctx, passwordProtected: !!password };
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   const s = await startServer();
   const host = process.env.HOST ?? "127.0.0.1", live = agentIsLive();
-  console.log(`Context on http://${host}:${s.port}  (${live ? `live · ${llmLabel()}` : "sample"}; ${s.passwordProtected ? "password protected" : "NO PASSWORD"})`);
+  console.log(`Context on http://${host}:${s.port}  (${live ? `live \u00b7 ${llmLabel()}` : "sample"}; ${s.passwordProtected ? "password protected" : "NO PASSWORD"})`);
   if (host !== "127.0.0.1" && host !== "localhost" && !s.passwordProtected) console.warn("WARNING: listening on a public interface without DEMO_PASSWORD. Anyone can approve decisions and spend your API credits.");
   process.on("SIGTERM", async () => { await s.stop(); process.exit(0); });
 }

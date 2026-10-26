@@ -1,6 +1,14 @@
 // Runtime configuration. Two data modes share one SQL dialect (kept simple enough for Postgres and Trino):
 //   direct  : one local Postgres stands in for all three silos (schemas ops, docs, kobo). Dev and tests.
 //   zetaris : Zetaris Cloud federates the real silos. Table names gain a catalog prefix.
+// Load a local .env file when this process is the server or one of the live CLI scripts. Real environment
+// variables always win over the file. Tests are not in this list, so they stay hermetic. Set CONTEXT_LOAD_ENV=0 to skip.
+{
+  const entry = String(process.argv[1] ?? "").replace(/\\/g, "/");
+  if (/\/(server\/index|scripts\/(ask|ask-live|llm-live))\.ts$/.test(entry) && process.env.CONTEXT_LOAD_ENV !== "0") {
+    try { process.loadEnvFile(); } catch { /* no .env file: use the real environment */ }
+  }
+}
 export type DataMode = "direct" | "zetaris";
 export const config = {
   mode: (process.env.DATA_MODE ?? "direct") as DataMode,
