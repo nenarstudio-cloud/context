@@ -5,7 +5,7 @@
 // variables always win over the file. Tests are not in this list, so they stay hermetic. Set CONTEXT_LOAD_ENV=0 to skip.
 {
   const entry = String(process.argv[1] ?? "").replace(/\\/g, "/");
-  if (/\/(server\/index|scripts\/(ask|ask-live|llm-live))\.ts$/.test(entry) && process.env.CONTEXT_LOAD_ENV !== "0") {
+  if (/\/(server\/index|scripts\/(ask|ask-live|llm-live|zetaris-register))\.ts$/.test(entry) && process.env.CONTEXT_LOAD_ENV !== "0") {
     try { process.loadEnvFile(); } catch { /* no .env file: use the real environment */ }
   }
 }
@@ -13,12 +13,15 @@ export type DataMode = "direct" | "zetaris";
 export const config = {
   mode: (process.env.DATA_MODE ?? "direct") as DataMode,
   databaseUrl: process.env.DATABASE_URL ?? "postgres://postgres:postgres@127.0.0.1:5432/context",
-  // Names you give the three connections in Zetaris. Confirm against your workspace.
+  // The name you give the registered Postgres in Zetaris (CREATE DATASOURCE <name> ...). One datasource serves all
+  // three silos (schemas ops, docs, kobo); table names are unique across them, so tables are addressed as <datasource>.<table>.
+  // Set ZETARIS_TABLE_STYLE=schema to address them as <datasource>.<schema>.<table> instead.
   catalogs: {
-    pg: process.env.ZETARIS_CATALOG_PG ?? "pg",
-    s3: process.env.ZETARIS_CATALOG_S3 ?? "s3",
-    kobo: process.env.ZETARIS_CATALOG_KOBO ?? "kobo",
+    pg: process.env.ZETARIS_CATALOG_PG ?? process.env.ZETARIS_DATASOURCE ?? "ctxpg",
+    s3: process.env.ZETARIS_CATALOG_S3 ?? process.env.ZETARIS_DATASOURCE ?? "ctxpg",
+    kobo: process.env.ZETARIS_CATALOG_KOBO ?? process.env.ZETARIS_DATASOURCE ?? "ctxpg",
   },
+  zetarisTableStyle: (process.env.ZETARIS_TABLE_STYLE ?? "plain") as "plain" | "schema",
   model: process.env.CONTEXT_MODEL ?? "claude-sonnet-5-5",
   stateDir: process.env.CONTEXT_STATE_DIR ?? ".context-state",
 };

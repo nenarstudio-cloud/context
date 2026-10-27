@@ -7,19 +7,23 @@ import { checkFindings, type Finding, type Issue } from "../evidence.ts";
 import { EVALUATOR_SYSTEM } from "./prompts.ts";
 import type { RoleEnv } from "./types.ts";
 
-export interface Evaluation { verdict: "pass" | "revise"; issues: Issue[]; summary: string; criticRan: boolean }
+export interface Evaluation { verdict: "pass" | "revise"; issues: Issue[]; summary: string; criticRan: boolean; skipped?: boolean }
 
-export async function runEvaluator(question: string, asOf: string, findings: Finding[], env: RoleEnv, round: number): Promise<Evaluation> {
+export async function runEvaluator(question: string, asOf: string, findings: Finding[], env: RoleEnv, round: number, useModel = true): Promise<Evaluation> {
   const codeIssues = checkFindings(findings, env.pool, question);
   env.tracer.add({ role: "Evaluator", action: "check", ok: codeIssues.length === 0, note: `round ${round}: code check found ${codeIssues.length} issue(s) in ${findings.length} finding(s)` });
 
   let modelIssues: Issue[] = [];
   let summary = "";
   let criticRan = false;
+  if (!useModel) {
+    env.tracer.add({ role: "Evaluator", action: "model", ok: true, note: "model critic skipped on the re-check; the automatic evidence check still applies" });
+    return { verdict: codeIssues.length ? "revise" : "pass", issues: codeIssues, summary: "", criticRan: false, skipped: true };
+  }
   try {
-    let budget = 30000;
+    let budget = 14000;
     const digest = findings.map((f, i) => {
-      const ev = f.evidence_refs.slice(0, 6).map((r) => { const x = env.pool.excerpt(r, 1500); budget -= x.length; return budget > 0 ? `   - ${x}` : `   - ${r} (excerpt omitted)`; }).join("\n");
+      const ev = f.evidence_refs.slice(0, 6).map((r) => { const x = env.pool.excerpt(r, 1100); budget -= x.length; return budget > 0 ? `   - ${x}` : `   - ${r} (excerpt omitted)`; }).join("\n");
       return `Finding ${i} [project ${f.project_id}, ${f.kind}, confidence ${f.confidence}]: ${f.statement}\n   cites: ${f.evidence_refs.join(", ")}\n   evidence:\n${ev}`;
     }).join("\n\n");
     const { res, json: j, retried } = await chatJson<{ verdict?: unknown; summary?: unknown; issues?: unknown }>(

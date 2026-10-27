@@ -104,7 +104,7 @@ export async function startServer(o: ServerOptions = {}) {
       if (url.pathname.startsWith("/api/") && !authed(req)) return json(res, 401, { error: "login required", login: true });
 
       if (req.method === "GET" && url.pathname === "/api/meta") {
-        return json(res, 200, { asOf: ctx.asOf, mode: hasKey ? "live" : "sample", model: hasKey ? llmLabel() : null, roles: teamOn(), fastModel: hasKey && teamOn() ? (process.env.NEMOTRON_FAST_MODEL || null) : null, dataMode: ctx.data.mode, graph: ctx.memory.stats(), supported: hasKey ? [] : replaySupported });
+        return json(res, 200, { asOf: ctx.asOf, mode: hasKey ? "live" : "sample", model: hasKey ? llmLabel() : null, roles: teamOn(), data: config.mode, fastModel: hasKey && teamOn() ? (process.env.NEMOTRON_FAST_MODEL || null) : null, dataMode: ctx.data.mode, graph: ctx.memory.stats(), supported: hasKey ? [] : replaySupported });
       }
       if (req.method === "GET" && url.pathname.startsWith("/api/trace/")) {
         const t = readTrace(config.stateDir, decodeURIComponent(url.pathname.slice("/api/trace/".length)));

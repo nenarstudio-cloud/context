@@ -75,6 +75,23 @@ export async function runTeam(question: string, ctx: ToolContext, o: TeamOptions
     const plan = await role("Planner", () => runPlanner(question, ctx.asOf, projects, env), (p) => `${p.subQuestions.length} sub question(s)`);
     const fallbackProject = plan.projectIds[0] ?? null;
 
+    // Organizational memory (Meterless H-MEM) is consulted on every run, not only when a model remembers to ask:
+    // what happened in earlier cases, what leadership decided. Hits go into the evidence pool with their provenance.
+    {
+      const id = "recall-0", args = { query: question };
+      emit({ type: "tool", id, name: "recall_memory", args, status: "running" });
+      const t0 = Date.now();
+      try {
+        const r = await runTool("recall_memory", args, ctx);
+        pool.add({ id, name: "recall_memory", args, ok: true, refs: r.refs, text: JSON.stringify(r).slice(0, 24000), rows: r.rows });
+        emit({ type: "tool", id, name: "recall_memory", args, status: "ok", summary: summarize(r), refs: r.refs.slice(0, 12) });
+        tracer.add({ role: "Planner", action: "tool", tool: "recall_memory", args_summary: JSON.stringify(args), ms: Date.now() - t0, ok: true, note: summarize(r) });
+      } catch (e) {
+        emit({ type: "tool", id, name: "recall_memory", args, status: "error", summary: (e as Error).message });
+        tracer.add({ role: "Planner", action: "tool", tool: "recall_memory", ok: false, ms: Date.now() - t0, note: (e as Error).message });
+      }
+    }
+
     // ---- Investigators, two at a time ----
     const first = await pooled(plan.subQuestions, 2, async (sq, i) => {
       try {
@@ -89,11 +106,14 @@ export async function runTeam(question: string, ctx: ToolContext, o: TeamOptions
     if (!findings.length) throw new Error("the Investigators returned no findings");
 
     // ---- Evaluator with revision rounds (stops at the soft deadline, keeping what is verified) ----
-    let rounds = 0, timedOut = false;
+    let rounds = 0, timedOut = false, criticRan = false;
+    let wholeSet: string[] = [];
     let evalRes: Evaluation = { verdict: "revise", issues: [], summary: "", criticRan: false };
     const evalLabel = (e: Evaluation) => (e.verdict === "pass" ? "pass" : `revise (${e.issues.length} issue${e.issues.length === 1 ? "" : "s"})`);
     try {
-      evalRes = await role("Evaluator", () => runEvaluator(question, ctx.asOf, findings, env, rounds), evalLabel);
+      evalRes = await role("Evaluator", () => runEvaluator(question, ctx.asOf, findings, env, rounds, true), evalLabel);
+      criticRan = evalRes.criticRan;
+      wholeSet = evalRes.issues.filter((x) => x.source === "model" && x.finding_index === -1).map((x) => x.problem);
       while (needsRevision(evalRes, rounds) && rounds < maxRounds) {
         rounds++;
         const flagged = [...new Set(evalRes.issues.map((x) => x.finding_index).filter((n) => n >= 0))];
@@ -108,12 +128,13 @@ export async function runTeam(question: string, ctx: ToolContext, o: TeamOptions
         tracer.add({ role: "Orchestrator", action: "revise", ok: true, note: `round ${rounds}: ${targets.length} finding(s) sent back, ${revised.findings.length} returned` });
         findings = [...findings.filter((_, i) => !targets.includes(i)), ...revised.findings];
         if (!findings.length) throw new Error("no findings left after revision");
-        evalRes = await role("Evaluator", () => runEvaluator(question, ctx.asOf, findings, env, rounds), evalLabel);
+        // The model critic reviews once. After a revision only the automatic evidence check runs again.
+        evalRes = await role("Evaluator", () => runEvaluator(question, ctx.asOf, findings, env, rounds, false), evalLabel);
       }
     } catch (e) {
       if (!(e instanceof RunLimitError)) throw e;
       timedOut = true;
-      evalRes = { ...evalRes, issues: [], criticRan: false };
+      evalRes = { ...evalRes, issues: [] };
       tracer.add({ role: "Orchestrator", action: "check", ok: false, note: "time limit reached during evaluation or revision; continuing with the findings that pass the code check" });
     }
 
@@ -122,10 +143,11 @@ export async function runTeam(question: string, ctx: ToolContext, o: TeamOptions
     const passed = findings.filter((_, i) => !failing.has(i));
     const dropped = findings.length - passed.length;
     if (!passed.length) throw new Error("no finding passed the evidence check");
-    const caveats = evalRes.issues.filter((x) => x.source === "model" && !failing.has(x.finding_index)).map((x) => x.problem);
+    // Model objections: if nothing was revised they apply to the current findings; after a revision only whole set remarks carry over.
+    const caveats = rounds === 0 ? evalRes.issues.filter((x) => x.source === "model" && !failing.has(x.finding_index)).map((x) => x.problem) : [...wholeSet];
     if (dropped) caveats.push(`${dropped} claim${dropped === 1 ? " was" : "s were"} dropped because the Evaluator could not verify ${dropped === 1 ? "it" : "them"} against the retrieved evidence.`);
     if (timedOut) caveats.push("The time limit was reached during review, so some findings were not re-checked by the model critic. Only findings that passed the automatic evidence check are included.");
-    else if (!evalRes.criticRan) caveats.push("The model critic was unavailable, so only the automatic evidence check was applied.");
+    else if (!criticRan) caveats.push("The model critic was unavailable, so only the automatic evidence check was applied.");
     tracer.add({ role: "Orchestrator", action: "check", ok: true, note: `${passed.length} finding(s) passed, ${dropped} dropped, ${rounds} revision round(s)` });
 
     // ---- Reporter ----
@@ -133,7 +155,7 @@ export async function runTeam(question: string, ctx: ToolContext, o: TeamOptions
     // Retrieved organizational memory (H-MEM), quoted as is, can fill the Pattern line when no finding is marked precedent.
     const memoryHits = pool.records
       .filter((r) => r.ok && r.name === "recall_memory")
-      .flatMap((r) => (r.rows ?? []).map((x) => ({ content: String(x.content ?? ""), refs: Array.isArray(x.refs) ? (x.refs as unknown[]).map(String) : [] })))
+      .flatMap((r) => (r.rows ?? []).filter((x) => String(x.origin ?? "") !== "plan_completion").map((x) => ({ content: String(x.content ?? ""), refs: Array.isArray(x.refs) ? (x.refs as unknown[]).map(String) : [] })))
       .filter((m) => m.content && m.refs.length && m.refs.every((ref) => pool.hasRef(ref)))
       .slice(0, 2);
     const report = await role("Reporter", () => runReporter(question, ctx.asOf, reported, gaps, caveats, reportEnv, memoryHits), (r) => `${r.decisions.length} decision(s) proposed`);
@@ -180,11 +202,11 @@ export async function runTeam(question: string, ctx: ToolContext, o: TeamOptions
 
     // ---- Answer ----
     let answer = report.answer;
-    if (dropped) {
+    if (dropped && !/dropped because/i.test(answer)) {
       const note = `${dropped} claim${dropped === 1 ? " was" : "s were"} dropped because ${dropped === 1 ? "it" : "they"} could not be verified against the evidence.`;
       answer = /^Confidence and gaps:/im.test(answer) ? answer.replace(/^(Confidence and gaps:.*)$/im, `$1 ${note}`) : `${answer}\n\nConfidence and gaps: ${note}`;
     }
-    if (timedOut || !evalRes.criticRan) {
+    if ((timedOut || !criticRan) && !/time limit was reached|critic was unavailable/i.test(answer)) {
       const note = timedOut ? "The time limit was reached during review, so some findings were not re-checked by the model critic." : "The model critic was unavailable, so only the automatic evidence check was applied.";
       answer = /^Confidence and gaps:/im.test(answer) ? answer.replace(/^(Confidence and gaps:.*)$/im, `$1 ${note}`) : `${answer}\n\nConfidence and gaps: ${note}`;
     }
@@ -192,9 +214,9 @@ export async function runTeam(question: string, ctx: ToolContext, o: TeamOptions
     emit({ type: "answer", text: answer });
     const ms = Date.now() - started;
     const verdict = evalRes.verdict === "pass" && !dropped && !timedOut ? "pass" : "pass-with-caveats";
-    tracer.meta = { mode: "live", rounds, verdict, findings: passed.length, dropped, decisions: proposed, critic: evalRes.criticRan, timed_out: timedOut, as_of: ctx.asOf };
+    tracer.meta = { mode: "live", rounds, verdict, findings: passed.length, dropped, decisions: proposed, critic: criticRan, timed_out: timedOut, as_of: ctx.asOf };
     const tracePath = tracer.save();
-    return { answer, runId: tracer.runId, tracePath, mode: "live", rounds, verdict, findings: passed.length, dropped, decisions: proposed, ms, criticRan: evalRes.criticRan };
+    return { answer, runId: tracer.runId, tracePath, mode: "live", rounds, verdict, findings: passed.length, dropped, decisions: proposed, ms, criticRan };
   } catch (e) {
     tracer.add({ role: "Orchestrator", action: e instanceof RunLimitError ? "error" : "fallback", ok: false, note: (e as Error).message });
     tracer.meta = { mode: "failed", error: (e as Error).message };

@@ -1,10 +1,11 @@
 import { config } from "../config.ts";
 
-// Table naming per mode. Zetaris adds a catalog prefix; the dialect stays plain SQL.
+// Table naming per mode. Zetaris addresses a registered table as <datasource>.<table> (or with the schema in between).
+const z = (catalog: string, schema: string, n: string) => (config.zetarisTableStyle === "schema" ? `${catalog}.${schema}.${n}` : `${catalog}.${n}`);
 export const T = {
-  ops: (n: string) => (config.mode === "zetaris" ? `${config.catalogs.pg}.ops.${n}` : `ops.${n}`),
-  docs: (n: string) => (config.mode === "zetaris" ? `${config.catalogs.s3}.docs.${n}` : `docs.${n}`),
-  kobo: (n: string) => (config.mode === "zetaris" ? `${config.catalogs.kobo}.api.${n}` : `kobo.${n}`),
+  ops: (n: string) => (config.mode === "zetaris" ? z(config.catalogs.pg, "ops", n) : `ops.${n}`),
+  docs: (n: string) => (config.mode === "zetaris" ? z(config.catalogs.s3, "docs", n) : `docs.${n}`),
+  kobo: (n: string) => (config.mode === "zetaris" ? z(config.catalogs.kobo, "kobo", n) : `kobo.${n}`),
 };
 
 // Model-supplied values never reach SQL unvalidated.

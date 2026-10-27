@@ -19,7 +19,9 @@
     "team-test": "tsx scripts/team-test.ts",
     "ask:live": "tsx scripts/ask-live.ts",
     "db:reset": "docker compose down -v && docker compose up -d --wait",
-    "trace": "tsx scripts/trace.ts"
+    "trace": "tsx scripts/trace.ts",
+    "zetaris-test": "tsx scripts/zetaris-test.ts",
+    "zetaris:register": "tsx scripts/zetaris-register.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.40.1",

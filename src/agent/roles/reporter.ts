@@ -53,7 +53,7 @@ export async function runReporter(
     for (let attempt = 0; attempt < 2 && !content; attempt++) {
       const res = await chat(
         [{ role: "system", content: REPORTER_SYSTEM(asOf) }, { role: "user", content: `Leadership question: ${question}\n\nChecked findings:\n${list}${extra ? "\n\n" + extra : ""}` }],
-        { model: pickModel("fast"), maxTokens: attempt ? 6000 : 4096, deadline: env.deadline },
+        { model: pickModel("main"), maxTokens: attempt ? 16000 : 8192, deadline: env.deadline },
       );
       env.tracer.reason("Reporter", res.reasoning);
       content = res.content; ms += res.ms; model = res.model;

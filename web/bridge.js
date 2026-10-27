@@ -221,7 +221,7 @@
   async function boot() {
     try { META = await api("/api/meta"); } catch { return; }
     pill.className = "ctxb-pill " + META.mode;
-    pill.innerHTML = `<i></i>${META.mode === "live" ? "live · " + esc(META.model) + (META.roles ? " · 4 agents" : "") : "sample"}`;
+    pill.innerHTML = `<i></i>${META.mode === "live" ? "live · " + esc(META.model) + (META.roles ? " · 4 agents" : "") + (META.data === "zetaris" ? " · data via Zetaris" : "") : "sample"}`;
     pill.title = META.mode === "live" ? "Questions are answered by the live agent over your data." : "No language model is connected. Four investigations run as scripted sample answers; other questions use the original demo answers.";
     const wrap = document.querySelector(".ask-suggestions");
     if (wrap && !$("#ctxb-livechips")) {

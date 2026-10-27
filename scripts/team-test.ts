@@ -56,11 +56,9 @@ function reply(messages: Msg[], model: string): Record<string, unknown> {
   if (role === "EVALUATOR") {
     const isRetry = messages.some((m) => m.role === "user" && String(m.content).startsWith("Reply now with ONLY"));
     if (!isRetry) evaluatorCalls++;
-    // Round 1: the first reply is empty (a reasoning model that used up its token budget), the retry carries the verdict.
+    // The first reply is empty (a reasoning model that used up its token budget); the retry carries the verdict.
     if (evaluatorCalls === 1 && !isRetry) return msg("");
-    if (evaluatorCalls === 1) return msg(J({ verdict: "revise", summary: "Two findings are not supported.", issues: [{ finding_index: 1, problem: "The applicant count is not in the cited paragraph." }] }));
-    // Round 2: only a model objection, no code issue. It must become a caveat and must NOT trigger a third pass.
-    return msg(J({ verdict: "revise", summary: "Slight overclaiming.", issues: [{ finding_index: 0, problem: "The word blocking is stronger than the evidence." }] }));
+    return msg(J({ verdict: "revise", summary: "Two findings are not supported.", issues: [{ finding_index: 1, problem: "The applicant count is not in the cited paragraph." }, { finding_index: -1, problem: "The set does not say who approves the spend." }] }));
   }
 
   if (role === "REPORTER" && bareReporter) {
@@ -159,12 +157,12 @@ const trace = readTrace(stateDir, result.runId) as { events: { role: string; act
 const saved = fs.readFileSync(result.tracePath ?? "", "utf-8");
 
 check("the four roles all ran", ["PLANNER", "INVESTIGATOR", "EVALUATOR", "REPORTER"].every((r) => seen.some((s) => s.startsWith(r))));
-check("planner and reporter use the fast model, the others the main model", seen.includes("PLANNER@mock/fast-model") && seen.includes("REPORTER@mock/fast-model") && seen.includes("INVESTIGATOR@mock/main-model") && seen.includes("EVALUATOR@mock/main-model"));
+check("the planner uses the fast model, everything else the main model", seen.includes("PLANNER@mock/fast-model") && seen.includes("REPORTER@mock/main-model") && seen.includes("INVESTIGATOR@mock/main-model") && seen.includes("EVALUATOR@mock/main-model"));
 check("two investigators ran for two sub questions", events.filter((e) => e.type === "role" && String(e.role).startsWith("Investigator") && e.status === "running" && !String(e.role).includes("R")).length === 2);
 check("an empty reply from a reasoning model is retried with a bigger budget", (trace?.events ?? []).some((e) => e.role === "Evaluator" && e.action === "model" && /needed a retry/.test(e.note ?? "")));
 check("the Evaluator sent findings back for one revision round", result.rounds === 1);
 check("first code check caught the invented number, the wrong project paragraph and the unknown source", /code check found 3 issue/.test(trace?.events.find((e) => e.role === "Evaluator" && e.action === "check")?.note ?? ""), trace?.events.find((e) => e.role === "Evaluator" && e.action === "check")?.note);
-check("a model only objection after the revision becomes a caveat and does not start another round", result.verdict === "pass-with-caveats" && result.rounds === 1 && result.dropped === 0 && result.findings === 3, JSON.stringify({ v: result.verdict, d: result.dropped, f: result.findings }));
+check("the model critic reviews once; after the revision only the code check runs, and the run passes", result.verdict === "pass" && result.rounds === 1 && result.dropped === 0 && result.findings === 3 && evaluatorCalls === 1 && result.criticRan, JSON.stringify({ v: result.verdict, d: result.dropped, f: result.findings }));
 check("only checked findings were recorded in memory", remembered.length === 3 && remembered.every((r) => !String(r.statement).includes("23 applicants") && !String(r.statement).includes("never retrieved")));
 check("a Pattern line is never left saying no precedent when a checked precedent exists", !/No precedent found/i.test(result.answer));
 check("inline caveats are not left inside the evidence lines", !/\(caveat:/i.test(result.answer));
