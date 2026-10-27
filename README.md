@@ -15,7 +15,7 @@ Zetaris runs locally in Docker. Our Postgres is registered as a datasource, and 
 2. docker compose up -d
 3. npm install
 4. npm start, then open the printed address.
-Run npm run eval for the 45 checks. Set SAMPLE_MODE=true for a run without a model [confirm this works before keeping this line].
+
 
 ## Data
 Synthetic and fictional: Amani Foundation, 9 projects, 89 documents, 373 survey rows.
